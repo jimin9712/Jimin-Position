@@ -16,13 +16,17 @@ import com.app.positionback.domain.position.PositionDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 
 import java.util.List;
 
 public interface AdminService {
     // 회원 관리
+    // 일반 회원 목록
     public MemberListDTO getMembers(int page, Pagination pagination);
     public int getMemberTotal();
+    public int getTotalWithMemberSearch(Search search);
+    // 기업 회원 목록
     public List<CorporationDTO> getCorporationMembers(Pagination pagination);
     public int getCorporationTotal();
     // 지원 현황 관리

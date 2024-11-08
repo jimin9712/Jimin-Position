@@ -15,6 +15,7 @@ import com.app.positionback.domain.position.PositionDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,8 +28,8 @@ public interface AdminMapper {
     public List<MemberDTO> selectAllMembers(@Param("pagination") Pagination pagination);
     // 일반 회원 전체 인원 수 조회
     public int selectMemberTotal();
-    // 검색 결과 개수 조회
-//    public int selectTotalWithMemberSearch(@Param())
+    // 일반 회원 검색 결과 전체 조회
+    public int selectTotalWithMemberSearch(@Param("search")Search search);
     // 기업 회원 목록 전체 조회
     public List<CorporationDTO> selectAllCorporationMembers(@Param("pagination") Pagination pagination);
     public int selectCorporationTotal();

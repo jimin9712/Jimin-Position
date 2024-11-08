@@ -16,7 +16,9 @@ import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.mapper.admin.AdminMapper;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,6 +37,11 @@ public class AdminDAO {
     // 일반 회원 전체 인원 조회
     public int getMemberTotal() {
         return adminMapper.selectMemberTotal();
+    }
+
+    // 일반 회원 검색 결과 전체 조회
+    public int getTotalWithMemberSearch(Search search) {
+        return adminMapper.selectTotalWithMemberSearch(search);
     }
 
     // 기업 회원 조회

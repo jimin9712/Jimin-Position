@@ -5,6 +5,7 @@ create table tbl_inquiry (
     inquiry_title varchar(255) not null,                    # 제목
     inquiry_content varchar(255) not null,                     # 내용
     inquiry_attachment varchar(255),                         # 파일 첨부
+    inquiry_status varchar(255) default '답변대기',           # 문의 답변 여부
     member_id bigint unsigned not null,                      # 회원 외래 키
     constraint fk_inquiry_member foreign key (member_id)    # 회원 외래 키 제약 조건
         references tbl_member(id),

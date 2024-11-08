@@ -17,6 +17,7 @@ import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.service.admin.AdminService;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -46,23 +47,22 @@ public class AdminController {
     // 일반 회원 정보 조회
     @GetMapping("/position/members/{page}")
     @ResponseBody
-    public MemberListDTO getMembers(@PathVariable("page") Integer page, Pagination pagination) {
-//        // 정렬 조건이 비어 있으면 기본 정렬 기준을 "recent"로 설정합니다.
-//        if (pagination.getOrder() == null) {
-//            pagination.setOrder("recent");
-//        }
-//
-//        // `order` 값이 올바른지 확인하여 기본 정렬 기준으로 지정할 수도 있습니다.
-//        if (!pagination.getOrder().equals("name") &&
-//                !pagination.getOrder().equals("status") &&
-//                !pagination.getOrder().equals("recent")) {
-//            pagination.setOrder("recent"); // 예외 처리: 유효하지 않은 정렬 기준일 경우 기본값 사용
-//        }
+    public MemberListDTO getMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        // 정렬 순서가 없을 경우 기본값 설정
+        if (pagination.getOrder() == null) {
+            pagination.setOrder("recent");
+        }
+        // 검색 조건이 있을 경우 총 개수 설정
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithMemberSearch(search));
+        } else {
+            pagination.setTotal(adminService.getMemberTotal());
+        }
 
-//        // 페이지네이션 계산 수행
-//        pagination.progress();
+        // 페이징 진행
+        pagination.progress();
 
-        // 정렬 및 페이징 조건에 맞는 회원 목록을 조회하여 반환
+        // 검색 조건에 맞는 목록 반환
         return adminService.getMembers(page, pagination);
     }
 

@@ -18,6 +18,7 @@ import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.mapper.admin.AdminMapper;
 import com.app.positionback.repository.admin.AdminDAO;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class AdminServiceImpl implements AdminService {
 
     // 회원 관리
     // 일반 회원 정보 조회
+    @Override
     public MemberListDTO getMembers(int page, Pagination pagination) {
         MemberListDTO memberListDTO = new MemberListDTO();
         pagination.setPage(page);
@@ -45,8 +47,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 일반 회원 전체 인원
+    @Override
     public int getMemberTotal() {
         return adminDAO.getMemberTotal();
+    }
+
+    // 일반 회원 검색 결과 전체 조회
+    @Override
+    public int getTotalWithMemberSearch(Search search) {
+        return adminDAO.getTotalWithMemberSearch(search);
     }
 
     // 기업 회원 정보 조회
