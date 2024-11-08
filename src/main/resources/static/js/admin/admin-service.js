@@ -42,6 +42,21 @@ const memberService = (() => {
 })();
 
 
+// 페이지 이동 함수
+async function goToPage(page) {
+    try {
+        const response = await fetch(`/admin/position/members/${page}`);
+        const data = await response.json();
+
+        // 페이지 번호를 업데이트하여 active 상태를 유지
+        data.pagination.currentPage = page;
+        showMemberList(data);
+    } catch (error) {
+        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
+    }
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 지원 현황 관리

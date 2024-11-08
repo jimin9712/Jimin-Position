@@ -7,7 +7,7 @@
     <select id="selectAllMembers" resultType="memberDTO">
         select id,
                member_name,
-               CASE WHEN member_email IS NOT NULL THEN member_email ELSE member_kakao_email END AS memberEmail,
+               coalesce(member_email, member_kakao_email) as memberEmail,
                member_address,
                member_phone,
                member_status,

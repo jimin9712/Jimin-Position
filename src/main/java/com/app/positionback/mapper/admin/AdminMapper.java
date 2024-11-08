@@ -23,8 +23,13 @@ import java.util.List;
 @Mapper
 public interface AdminMapper {
     // 회원 관리
+    // 일반 회원 목록 전체 조회
     public List<MemberDTO> selectAllMembers(@Param("pagination") Pagination pagination);
+    // 일반 회원 전체 인원 수 조회
     public int selectMemberTotal();
+    // 검색 결과 개수 조회
+//    public int selectTotalWithMemberSearch(@Param())
+    // 기업 회원 목록 전체 조회
     public List<CorporationDTO> selectAllCorporationMembers(@Param("pagination") Pagination pagination);
     public int selectCorporationTotal();
     // 지원현황 관리
