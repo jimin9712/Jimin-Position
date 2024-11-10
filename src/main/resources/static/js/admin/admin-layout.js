@@ -1,13 +1,44 @@
+// DOM 요소 가져오기
 const MemberListLayout = document.querySelector(".UserTable_container"); // 멤버 목록이 표시될 실제 컨테이너
 const MemberListPaging = document.querySelector(".pagination-list"); // 페이지네이션 요소
-// const keyword = document.querySelector(".Filter_searchInput")
-// const search = [[${search}]]
-//
-// if(search.keyword === null){
-//     search.keyword = '';
-// }
+const keywordInput = document.querySelector(".Filter_searchInput"); // 검색어 입력 필드
+const sortOptions = document.querySelectorAll(".sort-filter-option"); // 정렬 옵션
+let selectedSort = "가입일 순"; // 기본 정렬 설정
 
-const showMemberList = ({ members, pagination }) => {
+// 검색어 초기화
+keywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+
+// 정렬 옵션 이벤트 설정
+sortOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+        // 정렬 기준 업데이트
+        selectedSort = option.textContent;
+        sortOptions.forEach((opt) => opt.classList.remove("selected"));
+        option.classList.add("selected");
+
+        // 검색어와 정렬 기준을 사용하여 멤버 목록 새로고침
+        fetchAndShowMembers(1);
+    });
+});
+
+// 검색어 입력 시 검색 실행
+keywordInput.addEventListener("input", () => {
+    fetchAndShowMembers(1);
+});
+
+// 페이지 이동 함수
+function goToPage(page) {
+    fetchAndShowMembers(page);
+}
+
+// 멤버 목록을 서버에서 가져오고 화면에 표시하는 함수
+const fetchAndShowMembers = (page) => {
+    const keyword = keywordInput.value;
+    memberService.fetchMembers(page, keyword, selectedSort, showMemberList);
+};
+
+// 멤버 목록과 페이지네이션을 표시하는 함수
+const showMemberList = ( members, pagination ) => {
     let text = `
         <div class="UserTable_row UserTable_header">
             <div class="UserTable_cell"><input type="checkbox" class="selectAllCheckbox"/></div>
@@ -21,7 +52,6 @@ const showMemberList = ({ members, pagination }) => {
         </div>
     `;
 
-    // 멤버 데이터를 누적하여 추가
     members.forEach((member) => {
         text += `
             <div class="UserTable_row">
@@ -37,62 +67,44 @@ const showMemberList = ({ members, pagination }) => {
         `;
     });
 
-    // 기존의 하드코딩된 헤더를 덮어쓰지 않고 멤버 목록을 추가
     MemberListLayout.innerHTML = text;
+    setupPagination(pagination);
+};
 
-    console.log("Total pages:", pagination.totalPages);
-
-    // 페이지 버튼 생성
+// 페이지네이션 설정 함수
+const setupPagination = (pagination) => {
     let pagingText = '';
 
-    // 처음 페이지로 이동하는 버튼
     pagingText += `
         <li class="pagination-first ${pagination.currentPage === 1 ? 'disabled' : ''}">
-            <a href="#" class="pagination-first-link" onclick="goToPage(1)" rel="nofollow">
-                <span class="pagination-first-icon" aria-hidden="true">«</span>
-            </a>
+            <a href="#" onclick="fetchAndShowMembers(1)">«</a>
         </li>
-    `;
-
-    // 이전 페이지로 이동하는 버튼
-    pagingText += `
         <li class="pagination-prev ${pagination.currentPage === 1 ? 'disabled' : ''}">
-            <a href="#" class="pagination-prev-link" onclick="goToPage(${pagination.currentPage - 1})" rel="prev nofollow">
-                <span class="pagination-prev-icon" aria-hidden="true">‹</span>
-            </a>
+            <a href="#" onclick="fetchAndShowMembers(${pagination.currentPage - 1})">‹</a>
         </li>
     `;
 
-    // 페이지 번호 버튼
     for (let i = pagination.startPage; i <= pagination.endPage; i++) {
         pagingText += `
             <li class="pagination-page ${i === pagination.currentPage ? 'active' : ''}">
-                <a href="#" class="pagination-page-link" onclick="goToPage(${i})">${i}</a>
+                <a href="#" onclick="fetchAndShowMembers(${i})">${i}</a>
             </li>
         `;
     }
 
-    // 다음 페이지로 이동하는 버튼
     pagingText += `
         <li class="pagination-next ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
-            <a href="#" class="pagination-next-link" onclick="goToPage(${pagination.currentPage + 1})" rel="next nofollow">
-                <span class="pagination-next-icon" aria-hidden="true">›</span>
-            </a>
+            <a href="#" onclick="fetchAndShowMembers(${pagination.currentPage + 1})">›</a>
         </li>
-    `;
-
-    // 마지막 페이지로 이동하는 버튼
-    pagingText += `
         <li class="pagination-last ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
-            <a href="#" class="pagination-last-link" onclick="goToPage(${pagination.realEnd})" rel="nofollow">
-                <span class="pagination-last-icon" aria-hidden="true">»</span>
-            </a>
+            <a href="#" onclick="fetchAndShowMembers(${pagination.totalPages})">»</a>
         </li>
     `;
 
-    // 페이지네이션을 동적으로 추가
     MemberListPaging.innerHTML = pagingText;
 };
+
+
 
 
 

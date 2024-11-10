@@ -3,20 +3,22 @@
 // memberService 객체 생성
 const memberService = (() => {
     // 일반 회원 데이터를 서버에서 가져오는 비동기
-    const fetchMembers = async (page, callback) => {
+    const fetchMembers = async (page, keyword = "", sortType = "", callback) => {
         try {
             // /admin/position/members 경로로 GET 요청
             page = page || 1;
-            const response = await fetch(`/admin/position/members/${page}`);
+            const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&type=${sortType}`);
 
             // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('회원 정보 fetch 실패');
             // 응답 데이터를 json으로 받음
-            const members = await response.json();
+            const data = await response.json();
 
-            // 콜백 함수가 생길 경우, 가져온 데이터를 콜백 함수에 전달
-            if (callback) {
-                callback(members);
+            // 응답 데이터 구조에 맞게 members와 pagination을 콜백에 전달
+            if (callback && data.members && data.pagination) {
+                callback(data.members, data.pagination);
+            } else {
+                console.error("응답 데이터 형식이 올바르지 않습니다.");
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지를 출력
@@ -40,22 +42,6 @@ const memberService = (() => {
 
     return { fetchMembers: fetchMembers, fetchCorporationMembers: fetchCorporationMembers };
 })();
-
-
-// 페이지 이동 함수
-async function goToPage(page) {
-    try {
-        const response = await fetch(`/admin/position/members/${page}`);
-        const data = await response.json();
-
-        // 페이지 번호를 업데이트하여 active 상태를 유지
-        data.pagination.currentPage = page;
-        showMemberList(data);
-    } catch (error) {
-        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
-    }
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -36,13 +36,13 @@ public class AdminServiceImpl implements AdminService {
     // 회원 관리
     // 일반 회원 정보 조회
     @Override
-    public MemberListDTO getMembers(int page, Pagination pagination) {
+    public MemberListDTO getMembers(int page, Pagination pagination, Search search) {
         MemberListDTO memberListDTO = new MemberListDTO();
         pagination.setPage(page);
         pagination.setTotal(adminDAO.getMemberTotal());
         pagination.progress();
         memberListDTO.setPagination(pagination);
-        memberListDTO.setMembers(adminDAO.memberInformation(pagination));
+        memberListDTO.setMembers(adminDAO.memberInformation(pagination, search));
         return memberListDTO;
     }
 

@@ -49,8 +49,8 @@ public class AdminController {
     @ResponseBody
     public MemberListDTO getMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
         // 정렬 순서가 없을 경우 기본값 설정
-        if (pagination.getOrder() == null) {
-            pagination.setOrder("recent");
+        if (search.getTypes() == null || search.getTypes().length == 0) {  // 수정: types 배열이 비어있거나 null인 경우
+            search.setTypes(new String[]{"recent"});    // 기본값으로 "recent" 설정
         }
         // 검색 조건이 있을 경우 총 개수 설정
         if (search.getKeyword() != null || search.getTypes() != null) {
@@ -63,7 +63,7 @@ public class AdminController {
         pagination.progress();
 
         // 검색 조건에 맞는 목록 반환
-        return adminService.getMembers(page, pagination);
+        return adminService.getMembers(page, pagination, search);
     }
 
     // 기업 회원 정보 조회

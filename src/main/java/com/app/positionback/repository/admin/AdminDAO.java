@@ -30,8 +30,8 @@ public class AdminDAO {
 
     // 회원 관리
     // 일반 회원 조회
-    public List<MemberDTO> memberInformation(Pagination pagination) {
-        return adminMapper.selectAllMembers(pagination);
+    public List<MemberDTO> memberInformation(Pagination pagination, Search search) {
+        return adminMapper.selectAllMembers(pagination, search);
     }
 
     // 일반 회원 전체 인원 조회

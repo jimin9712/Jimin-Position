@@ -1,29 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.positionback.mapper.admin.AdminMapper">
-    <sql id="search">
-        <if test="search.keyword != null and search.keyword != 'null.toString()">
-
-        </if>
+    <sql id="MemberSearch">
+        <where>
+            <if test="search.keyword != null and search.keyword != ''">
+                and (
+                member_name like CONCAT('%', #{search.keyword}, '%')
+                or member_email like CONCAT('%', #{search.keyword}, '%')
+                or member_address like CONCAT('%', #{search.keyword}, '%')
+                or member_phone like CONCAT('%', #{search.keyword}, '%')
+                )
+            </if>
+        </where>
     </sql>
     <!-- 회원 관리 -->
-    <!-- 일반 회원 목록 페이징 -->
+    <!-- 일반 회원 목록 -->
     <select id="selectAllMembers" resultType="memberDTO">
         select id,
-               member_name,
-               coalesce(member_email, member_kakao_email) as memberEmail,
-               member_address,
-               member_phone,
-               member_status,
-               created_date
+        member_name,
+        coalesce(member_email, member_kakao_email) as memberEmail,
+        member_address,
+        member_phone,
+        member_status,
+        created_date
         from tbl_member
-        order by created_date desc
+        <include refid="MemberSearch"/>
+        order by
+        <choose>
+            <when test="search.types[0] == 'recent'">
+                created_date desc
+            </when>
+            <when test="search.types[0] == 'active'">
+                member_status = '활동중' desc, created_date desc
+            </when>
+            <when test="search.types[0] == 'suspended'">
+                member_status = '정지' desc, created_date desc
+            </when>
+            <when test="search.types[0] == 'withdrawn'">
+                member_status = '탈퇴' desc, created_date desc
+            </when>
+            <otherwise>
+                created_date desc
+            </otherwise>
+        </choose>
         limit #{pagination.startRow}, #{pagination.rowCount}
     </select>
 
-
     <select id="selectMemberTotal">
         select count(*) from tbl_member
+    </select>
+
+    <select id="selectTotalWithMemberSearch">
+        select count(*) from tbl_member
+        <include refid="MemberSearch"/>
     </select>
 
     <!-- 기업 회원 목록 페이징 -->

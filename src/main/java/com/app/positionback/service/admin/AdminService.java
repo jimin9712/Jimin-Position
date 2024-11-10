@@ -23,7 +23,7 @@ import java.util.List;
 public interface AdminService {
     // 회원 관리
     // 일반 회원 목록
-    public MemberListDTO getMembers(int page, Pagination pagination);
+    public MemberListDTO getMembers(int page, Pagination pagination, Search search);
     public int getMemberTotal();
     public int getTotalWithMemberSearch(Search search);
     // 기업 회원 목록
