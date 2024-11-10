@@ -31,8 +31,11 @@ public interface AdminMapper {
     // 일반 회원 검색 결과 전체 조회
     public int selectTotalWithMemberSearch(@Param("search")Search search);
     // 기업 회원 목록 전체 조회
-    public List<CorporationDTO> selectAllCorporationMembers(@Param("pagination") Pagination pagination);
+    public List<CorporationDTO> selectAllCorporationMembers(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    // 기업 회원 전체 인원 수 조회
     public int selectCorporationTotal();
+    // 기업 회원 검색 결과 전체 조회
+    public int selectTotalWithCorporationSearch(@Param("search")Search search);
     // 지원현황 관리
     List<ApplyDTO> selectAllApply();
     List<InterviewDTO> selectAllInterview();

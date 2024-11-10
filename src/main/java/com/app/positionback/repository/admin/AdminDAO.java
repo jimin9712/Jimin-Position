@@ -45,13 +45,18 @@ public class AdminDAO {
     }
 
     // 기업 회원 조회
-    public List<CorporationDTO> corporationInformation(Pagination pagination) {
-        return adminMapper.selectAllCorporationMembers(pagination);
+    public List<CorporationDTO> corporationInformation(Pagination pagination, Search search) {
+        return adminMapper.selectAllCorporationMembers(pagination, search);
     }
 
     // 기업 회원 전체 인원 조회
     public int getCorporationTotal() {
         return adminMapper.selectCorporationTotal();
+    }
+
+    // 기업 회원 검색 결과 전체 조회
+    public int getTotalWithCorporationSearch(Search search) {
+        return adminMapper.selectTotalWithCorporationSearch(search);
     }
 
     // 지원현황 관리

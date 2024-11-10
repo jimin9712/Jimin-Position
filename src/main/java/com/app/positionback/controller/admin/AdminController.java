@@ -3,6 +3,7 @@ package com.app.positionback.controller.admin;
 import com.app.positionback.domain.apply.ApplyDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
 import com.app.positionback.domain.corporation.CorporationDTO;
+import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
@@ -49,7 +50,7 @@ public class AdminController {
     @ResponseBody
     public MemberListDTO getMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
         // 정렬 순서가 없을 경우 기본값 설정
-        if (search.getTypes() == null || search.getTypes().length == 0) {  // 수정: types 배열이 비어있거나 null인 경우
+        if (search.getTypes() == null || search.getTypes().length == 0) {  // types 배열이 비어있거나 null인 경우
             search.setTypes(new String[]{"recent"});    // 기본값으로 "recent" 설정
         }
         // 검색 조건이 있을 경우 총 개수 설정
@@ -58,20 +59,23 @@ public class AdminController {
         } else {
             pagination.setTotal(adminService.getMemberTotal());
         }
-
         // 페이징 진행
         pagination.progress();
-
         // 검색 조건에 맞는 목록 반환
         return adminService.getMembers(page, pagination, search);
     }
 
     // 기업 회원 정보 조회
-    @GetMapping("/position/corporation-members")
+    @GetMapping("/position/corporation-members/{page}")
     @ResponseBody
-    public List<CorporationDTO> getCorporationMembers(Pagination pagination) {
+    public CorporationListDTO getCorporationMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if (search.getKeyword() != null) {
+            pagination.setTotal(adminService.getTotalWithCorporationSearch(search));
+        } else {
+            pagination.setTotal(adminService.getCorporationTotal());
+        }
         pagination.progress();
-        return adminService.getCorporationMembers(pagination);
+        return adminService.getCorporationMembers(page, pagination, search);
     }
 
     // 지원 현황 관리

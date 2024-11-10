@@ -2,20 +2,18 @@ package com.app.positionback.service.admin;
 
 import com.app.positionback.domain.apply.ApplyDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
-import com.app.positionback.domain.corporation.CorporationDTO;
+import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
-import com.app.positionback.domain.member.MemberDTO;
 import com.app.positionback.domain.member.MemberListDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.payment.PaymentDTO;
 import com.app.positionback.domain.position.PositionDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
-import com.app.positionback.mapper.admin.AdminMapper;
 import com.app.positionback.repository.admin.AdminDAO;
 import com.app.positionback.utill.Pagination;
 import com.app.positionback.utill.Search;
@@ -59,14 +57,27 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 기업 회원 정보 조회
-    public List<CorporationDTO> getCorporationMembers(Pagination pagination) {
+    @Override
+    public CorporationListDTO getCorporationMembers(int page, Pagination pagination, Search search) {
+        CorporationListDTO corporationListDTO = new CorporationListDTO();
+        pagination.setPage(page);
         pagination.setTotal(adminDAO.getCorporationTotal());
-        return adminDAO.corporationInformation(pagination);
+        pagination.progress();
+        corporationListDTO.setPagination(pagination);
+        corporationListDTO.setCorporations(adminDAO.corporationInformation(pagination, search));
+        return corporationListDTO;
     }
 
     // 기업 회원 전체 인원
+    @Override
     public int getCorporationTotal() {
         return adminDAO.getCorporationTotal();
+    }
+
+    // 기업 회원 검색 결과 전체 조회
+    @Override
+    public int getTotalWithCorporationSearch(Search search) {
+        return adminDAO.getTotalWithCorporationSearch(search);
     }
 
 

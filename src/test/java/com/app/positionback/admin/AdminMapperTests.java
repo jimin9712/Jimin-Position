@@ -4,6 +4,7 @@ import com.app.positionback.domain.corporation.CorporationDTO;
 import com.app.positionback.domain.member.MemberDTO;
 import com.app.positionback.mapper.admin.AdminMapper;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class AdminMapperTests {
         pagination.setTotal(adminMapper.selectMemberTotal());
         pagination.progress();
         log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
-        adminMapper.selectAllMembers(pagination);
+        adminMapper.selectAllMembers(pagination, new Search());
     }
 
     // 기업 회원 목록 MapperTests
@@ -37,6 +38,6 @@ public class AdminMapperTests {
         pagination.setTotal(adminMapper.selectCorporationTotal());
         pagination.progress();
         log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
-        adminMapper.selectAllCorporationMembers(pagination);
+        adminMapper.selectAllCorporationMembers(pagination, new Search());
     }
 }
