@@ -26,15 +26,27 @@ keywordInput.addEventListener("input", () => {
     fetchAndShowMembers(1);
 });
 
-// 페이지 이동 함수
+// 페이지 이동 함수 - fetchAndShowMembers 호출
 function goToPage(page) {
     fetchAndShowMembers(page);
 }
 
 // 멤버 목록을 서버에서 가져오고 화면에 표시하는 함수
-const fetchAndShowMembers = (page) => {
+const fetchAndShowMembers = async (page) => {
     const keyword = keywordInput.value;
-    memberService.fetchMembers(page, keyword, selectedSort, showMemberList);
+    const sortType = selectedSort;
+
+    try {
+        // 데이터를 서버에서 가져오는 요청
+        const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&type=${sortType}`);
+        const data = await response.json();
+
+        // 페이지 데이터와 멤버 데이터를 표시하는 함수 호출
+        data.pagination.currentPage = page;
+        showMemberList(data);
+    } catch (error) {
+        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
+    }
 };
 
 // 멤버 목록과 페이지네이션을 표시하는 함수
