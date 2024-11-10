@@ -25,22 +25,21 @@
         created_date
         from tbl_member
         <include refid="MemberSearch"/>
-        order by
         <choose>
             <when test="search.types[0] == 'recent'">
-                created_date desc
+                order by created_date desc
             </when>
             <when test="search.types[0] == 'active'">
-                member_status = '활동중' desc, created_date desc
+                order by (member_status = '활동중') desc, created_date desc
             </when>
             <when test="search.types[0] == 'suspended'">
-                member_status = '정지' desc, created_date desc
+                order by (member_status = '정지') desc, created_date desc
             </when>
             <when test="search.types[0] == 'withdrawn'">
-                member_status = '탈퇴' desc, created_date desc
+                order by (member_status = '탈퇴') desc, created_date desc
             </when>
             <otherwise>
-                created_date desc
+                order by created_date desc
             </otherwise>
         </choose>
         limit #{pagination.startRow}, #{pagination.rowCount}

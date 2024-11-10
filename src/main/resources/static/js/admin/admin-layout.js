@@ -11,8 +11,10 @@ keywordInput.value = new URLSearchParams(window.location.search).get("keyword") 
 // 정렬 옵션 이벤트 설정
 sortOptions.forEach((option) => {
     option.addEventListener("click", () => {
-        // 정렬 기준 업데이트
-        selectedSort = option.textContent;
+        // 선택한 옵션의 data-type 속성을 가져와서 selectedSort에 저장
+        selectedSort = option.getAttribute("data-type");
+
+        // 기존 선택 해제하고 새로운 선택 항목에 selected 클래스 추가
         sortOptions.forEach((opt) => opt.classList.remove("selected"));
         option.classList.add("selected");
 
@@ -38,7 +40,7 @@ const fetchAndShowMembers = async (page) => {
 
     try {
         // 데이터를 서버에서 가져오는 요청
-        const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&type=${sortType}`);
+        const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&types=${sortType}`);
         const data = await response.json();
 
         // 페이지 데이터와 멤버 데이터를 표시하는 함수 호출

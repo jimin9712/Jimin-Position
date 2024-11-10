@@ -6,7 +6,7 @@ const memberService = (() => {
         try {
             page = page || 1;
             // /admin/position/members 경로로 GET 요청
-            const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&type=${sortType}`);
+            const response = await fetch(`/admin/position/members/${page}?keyword=${keyword}&types=${sortType}`);
 
             // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('회원 정보 fetch 실패');
