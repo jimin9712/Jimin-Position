@@ -29,21 +29,4 @@ INSERT INTO tbl_apply (
 ALTER TABLE tbl_apply
     ADD COLUMN id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY;
 
-SELECT
-    corp.corporation_name,
-    a.created_date,
-    n.notice_title,
-    m.member_name,
-    m.member_phone,
-    a.apply_type,
-    a.apply_status
-FROM
-    tbl_apply a
-        JOIN
-    tbl_notice n ON a.notice_id = n.id
-        JOIN
-    tbl_resume r ON a.resume_id = r.id
-        JOIN
-    tbl_member m ON r.member_id = m.id
-        JOIN
-    tbl_corporation corp ON n.corporation_id = corp.id;
+
