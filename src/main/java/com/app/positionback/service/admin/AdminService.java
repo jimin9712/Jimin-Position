@@ -7,6 +7,7 @@ import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
+import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberDTO;
@@ -46,8 +47,14 @@ public interface AdminService {
     List<EvaluationCorporationDTO> getEvaluationCorporations();
     List<EvaluationPositionerDTO> getEvaluationPositioners();
     // 문의 관리
-    List<InquiryDTO> getMemberInquiry(Pagination pagination);
-    List<InquiryDTO> getCorporationInquiry(Pagination pagination);
+    // 일반 회원 문의 목록
+    public InquiryListDTO getMemberInquiry(int page, Pagination pagination, Search search);
+    public int getMemberInquiryTotal();
+    public int getTotalWithMemberInquirySearch(Search search);
+    // 기업 회원 문의 목록
+    public InquiryListDTO getCorporationInquiry(int page, Pagination pagination, Search search);
+    public int getCorporationInquiryTotal();
+    public int getTotalWithCorporationInquirySearch(Search search);
     // 신고 관리
     List<ComplainDTO> getComplains();
 }

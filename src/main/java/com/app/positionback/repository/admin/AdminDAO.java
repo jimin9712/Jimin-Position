@@ -108,13 +108,34 @@ public class AdminDAO {
     }
 
     // 문의 관리
-    // 일반 회원 문의 전체 조회 memberInquiry
-    public List<InquiryDTO> memberInquiry(Pagination pagination) {
-        return adminMapper.selectAllMemberInquiry(pagination);
+    // 일반 회원 문의 조회
+    public List<InquiryDTO> memberInquiry(Pagination pagination, Search search) {
+        return adminMapper.selectAllMemberInquiry(pagination, search);
     }
-    // 기업 회원 문의 전체 조회
-    public List<InquiryDTO> corporationInquiry(Pagination pagination) {
-        return adminMapper.selectAllCorporationInquiry(pagination);
+
+    // 일반 회원 전체 문의 수
+    public int getMemberInquiryTotal() {
+        return adminMapper.selectMemberInquiryTotal();
+    }
+
+    // 일반 회원 문의 검색 결과 전체 조회
+    public int getTotalWithMemberInquirySearch(Search search) {
+        return adminMapper.selectTotalWithMemberInquirySearch(search);
+    }
+
+    // 기업 회원 문의 조회
+    public List<InquiryDTO> corporationInquiry(Pagination pagination, Search search) {
+        return adminMapper.selectAllCorporationInquiry(pagination, search);
+    }
+
+    // 기업 회원 전체 문의 수
+    public int getCorporationInquiryTotal() {
+        return adminMapper.selectCorporationInquiryTotal();
+    }
+
+    // 기업 회원 문의 검색 결과 전체 조회
+    public int getTotalWithCorporationInquirySearch(Search search) {
+        return adminMapper.selectTotalWithCorporationInquirySearch(search);
     }
 
     // 신고 관리

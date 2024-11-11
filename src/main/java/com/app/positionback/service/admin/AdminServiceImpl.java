@@ -6,6 +6,7 @@ import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
+import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberListDTO;
@@ -30,6 +31,7 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class AdminServiceImpl implements AdminService {
     private final AdminDAO adminDAO;
+    private final InquiryListDTO inquiryListDTO;
 
     // 회원 관리
     // 일반 회원 정보 조회
@@ -130,17 +132,54 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 문의 관리
-    // 일반 문의
-    public List<InquiryDTO> getMemberInquiry(Pagination pagination) {
+    // 일반 회원 문의
+    @Override
+    public InquiryListDTO getMemberInquiry(int page, Pagination pagination, Search search) {
+        InquiryListDTO inquiryDTO = new InquiryListDTO();
+        pagination.setPage(page);
+        pagination.setTotal(adminDAO.getMemberInquiryTotal());
         pagination.progress();
-        return adminDAO.memberInquiry(pagination);
+        inquiryListDTO.setPagination(pagination);
+        inquiryListDTO.setInquiries(adminDAO.memberInquiry(pagination, search));
+        return inquiryListDTO;
     }
 
-    // 기업 문의
-    public List<InquiryDTO> getCorporationInquiry(Pagination pagination) {
-        pagination.progress();
-        return adminDAO.corporationInquiry(pagination);
+    // 일반 회원 전체 문의 수
+    @Override
+    public int getMemberInquiryTotal() {
+        return adminDAO.getMemberInquiryTotal();
     }
+
+    // 일반 회원 검색 문의 수
+    @Override
+    public int getTotalWithMemberInquirySearch(Search search) {
+        return  adminDAO.getTotalWithMemberInquirySearch(search);
+    }
+
+    // 기업 회원 문의
+    @Override
+    public InquiryListDTO getCorporationInquiry(int page, Pagination pagination, Search search) {
+        InquiryListDTO inquiryDTO = new InquiryListDTO();
+        pagination.setPage(page);
+        pagination.setTotal(adminDAO.getCorporationInquiryTotal());
+        pagination.progress();
+        inquiryListDTO.setPagination(pagination);
+        inquiryListDTO.setInquiries(adminDAO.corporationInquiry(pagination, search));
+        return inquiryListDTO;
+    }
+
+    // 기업 회원 전체 문의 수
+    @Override
+    public int getCorporationInquiryTotal() {
+        return adminDAO.getCorporationInquiryTotal();
+    }
+
+    // 기업 회원 검색 문의 수
+    @Override
+    public int getTotalWithCorporationInquirySearch(Search search) {
+        return  adminDAO.getTotalWithCorporationInquirySearch(search);
+    }
+
 
     // 신고 관리
     // 기업 후기 신고

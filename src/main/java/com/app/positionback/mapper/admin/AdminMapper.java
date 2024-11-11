@@ -51,8 +51,14 @@ public interface AdminMapper {
     List<EvaluationCorporationDTO> selectAllEvaluationCorporation();
     List<EvaluationPositionerDTO> selectAllEvaluationPositioner();
     // 문의 관리
-    List<InquiryDTO> selectAllMemberInquiry(@Param("pagination") Pagination pagination);
-    List<InquiryDTO> selectAllCorporationInquiry(@Param("pagination") Pagination pagination);
+    // 일반 회원 문의
+    public List<InquiryDTO> selectAllMemberInquiry(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    public int selectMemberInquiryTotal();
+    public int selectTotalWithMemberInquirySearch(@Param("search")Search search);
+    // 기업 회원 문의
+    public List<InquiryDTO> selectAllCorporationInquiry(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    public int selectCorporationInquiryTotal();
+    public int selectTotalWithCorporationInquirySearch(@Param("search")Search search);
     // 신고 관리
     List<ComplainDTO> selectAllComplain();
 }

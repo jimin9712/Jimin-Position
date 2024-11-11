@@ -7,6 +7,7 @@ import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
+import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberDTO;
@@ -69,6 +70,7 @@ public class AdminController {
     @GetMapping("/position/corporation-members/{page}")
     @ResponseBody
     public CorporationListDTO getCorporationMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        System.out.println("Received keyword: " + search.getKeyword());
         if (search.getKeyword() != null) {
             pagination.setTotal(adminService.getTotalWithCorporationSearch(search));
         } else {
@@ -148,19 +150,35 @@ public class AdminController {
 
     // 문의 관리
     // 일반 회원 문의 정보 조회
-    @GetMapping("/position/member-inquiry")
+    @GetMapping("/position/member-inquiry/{page}")
     @ResponseBody
-    public List<InquiryDTO> getMemberInquiry(Pagination pagination) {
+    public InquiryListDTO getMemberInquiry(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if(search.getTypes() == null || search.getTypes().length == 0) {
+            search.setTypes(new String[]{"recent"});
+        }
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithMemberInquirySearch(search));
+        } else {
+            pagination.setTotal(adminService.getMemberInquiryTotal());
+        }
         pagination.progress();
-        return adminService.getMemberInquiry(pagination);
+        return adminService.getMemberInquiry(page, pagination, search);
     }
 
     // 기업 회원 문의 정보 조회
-    @GetMapping("/position/corporation-inquiry")
+    @GetMapping("/position/corporation-inquiry/{page}")
     @ResponseBody
-    public List<InquiryDTO> getCorporationInquiry(Pagination pagination) {
+    public InquiryListDTO getCorporationInquiry(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if(search.getTypes() == null || search.getTypes().length == 0) {
+            search.setTypes(new String[]{"recent"});
+        }
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithCorporationInquirySearch(search));
+        } else {
+            pagination.setTotal(adminService.getCorporationInquiryTotal());
+        }
         pagination.progress();
-        return adminService.getCorporationInquiry(pagination);
+        return adminService.getMemberInquiry(page, pagination, search);
     }
 
     // 신고 관리

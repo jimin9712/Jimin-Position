@@ -40,6 +40,7 @@ function goToPage(page) {
     fetchAndShowMembers(page);
 }
 
+
 // 일반 회원 목록을 서버에서 가져오고 화면에 표시하는 함수
 const fetchAndShowMembers = async (page) => {
     const keyword = keywordInput.value;
@@ -144,10 +145,21 @@ const showMemberList = ( { members, pagination } ) => {
     MemberListPaging.innerHTML = pagingText;
 };
 
+// 기업 회원 부분
+// 검색어 입력 시 검색 실행
+keywordInput.addEventListener("input", () => {
+    fetchAndShowCorporations(1);
+});
+
+// 페이지 이동 함수 - fetchAndShowMembers 호출
+function goToPage(page) {
+    fetchAndShowCorporations(page);
+}
+
 // 기업 회원 목록을 서버에서 가져오고 화면에 표시하는 함수
 const fetchAndShowCorporations = async (page) => {
     const keyword = keywordInput.value;
-
+    console.log("검색어:", keyword); // 검색어가 제대로 입력되는지 확인
     try {
         // 데이터를 서버에서 가져오는 요청
         const response = await fetch(`/admin/position/corporation-members/${page}?keyword=${keyword}`);
@@ -160,16 +172,6 @@ const fetchAndShowCorporations = async (page) => {
         console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
     }
 };
-
-// 검색어 입력 시 검색 실행
-keywordInput.addEventListener("input", () => {
-    fetchAndShowCorporations(1);
-});
-
-// 페이지 이동 함수 - fetchAndShowMembers 호출
-function goToPage(page) {
-    fetchAndShowCorporations(page);
-}
 
 // 기업 회원 목록과 페이지네이션을 표시하는 함수
 const showCorporationList = ( { corporations, pagination } ) => {

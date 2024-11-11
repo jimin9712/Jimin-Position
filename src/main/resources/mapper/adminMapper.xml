@@ -94,24 +94,34 @@
     </select>
 
     <!-- 문의 관리 -->
-
     <!-- 일반 문의 목록 페이징 -->
+    <sql id="MemberInquirySearch">
+        <where>
+            <if test="search.keyword != null and search.keyword != ''">
+                and (
+                inquiry_category like concat('%', #{search.keyword}, '%')
+                or inquiry_title like concat('%', #{search.keyword}, '%')
+                or inquiry_content like concat('%', #{search.keyword}, '%')
+                or member_email like concat('%', #{search.keyword}, '%')
+                )
+            </if>
+        </where>
+    </sql>
+
     <select id="selectAllMemberInquiry" resultType="inquiryDTO">
-        SELECT id,
+        select id,
                inquiry_type,
                inquiry_category,
+               created_date as createdDate,
                inquiry_title,
                inquiry_content,
-               created_date AS createdDate,
-               updated_date AS updatedDate,
-               CASE
-                   WHEN member_email IS NOT NULL THEN member_email
-                   ELSE member_kakao_email
-                   END AS memberEmail
-        FROM tbl_inquiry
-        WHERE inquiry_type = '개인'
-        ORDER BY createdDate DESC
-            LIMIT #{pagination.startRow}, #{pagination.rowCount}
+               coalesce(member_email, member_kakao_email) as memberEmail,
+               inquiry_status
+        from tbl_inquiry
+        <include refid="MemberInquirySearch"/>
+        where inquiry_type = '개인'
+        order by createdDate desc
+        limit #{pagination.startRow}, #{pagination.rowCount}
     </select>
 
     <!-- 기업 문의 목록 페이징 -->
