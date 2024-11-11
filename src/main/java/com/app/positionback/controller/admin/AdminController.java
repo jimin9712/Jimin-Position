@@ -1,6 +1,7 @@
 package com.app.positionback.controller.admin;
 
 import com.app.positionback.domain.apply.ApplyDTO;
+import com.app.positionback.domain.apply.ApplyListDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
 import com.app.positionback.domain.corporation.CorporationDTO;
 import com.app.positionback.domain.corporation.CorporationListDTO;
@@ -82,11 +83,21 @@ public class AdminController {
 
     // 지원 현황 관리
     // 지원 현황
-    @GetMapping("/position/apply")
+    @GetMapping("/position/apply/{page}")
     @ResponseBody
-    public List<ApplyDTO> getApplys () {
-        return adminService.getApplys();
+    public ApplyListDTO getApplys(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if (search.getTypes() == null || search.getTypes().length == 0) {
+            search.setTypes(new String[]{"recent"});
+        }
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithApplySearch(search));
+        } else {
+            pagination.setTotal(adminService.getApplyTotal());
+        }
+        pagination.progress();
+        return adminService.getApplys(page, pagination, search);
     }
+
     // 면접 현황
     @GetMapping("/position/interview")
     @ResponseBody

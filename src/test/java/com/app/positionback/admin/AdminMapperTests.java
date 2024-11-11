@@ -40,4 +40,14 @@ public class AdminMapperTests {
         log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
         adminMapper.selectAllCorporationMembers(pagination, new Search());
     }
+
+    // 지원 현황 MapperTests
+    @Test
+    public void testSelectAllApplys() {
+        Pagination pagination = new Pagination();
+        pagination.setTotal(adminMapper.selectApplyTotal());
+        pagination.progress();
+        log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
+        adminMapper.selectAllApply(pagination, new Search());
+    }
 }

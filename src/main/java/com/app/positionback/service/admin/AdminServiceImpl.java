@@ -1,6 +1,7 @@
 package com.app.positionback.service.admin;
 
 import com.app.positionback.domain.apply.ApplyDTO;
+import com.app.positionback.domain.apply.ApplyListDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
 import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
@@ -84,10 +85,30 @@ public class AdminServiceImpl implements AdminService {
 
 
     // 지원 현황 관리
-    // 지원 현황
-    public List<ApplyDTO> getApplys() {
-        return adminDAO.applyInformation();
+    // 지원 현황 조회
+    @Override
+    public ApplyListDTO getApplys(int page, Pagination pagination, Search search) {
+        ApplyListDTO applyListDTO = new ApplyListDTO();
+        pagination.setPage(page);
+        pagination.setTotal(adminDAO.getApplyTotal());
+        pagination.progress();
+        applyListDTO.setPagination(pagination);
+        applyListDTO.setApplies(adminDAO.applyInformation(pagination, search));
+        return applyListDTO;
     }
+
+    // 지원 현황 전체 개수 조회
+    @Override
+    public int getApplyTotal() {
+        return adminDAO.getApplyTotal();
+    }
+
+    // 지원 현황 검색 결과 전체 조회
+    @Override
+    public int getTotalWithApplySearch(Search search) {
+        return adminDAO.getTotalWithApplySearch(search);
+    }
+
     // 면접 현황
     public List<InterviewDTO> getInterviews() {
         return adminDAO.interviewInformation();

@@ -37,8 +37,13 @@ public interface AdminMapper {
     // 기업 회원 검색 결과 전체 조회
     public int selectTotalWithCorporationSearch(@Param("search")Search search);
     // 지원현황 관리
-    List<ApplyDTO> selectAllApply();
+    // 지원 현황
+    public List<ApplyDTO> selectAllApply(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    public int selectApplyTotal();
+    public int selectTotalWithApplySearch(@Param("search")Search search);
+    // 면접 현황
     List<InterviewDTO> selectAllInterview();
+    // 포지션 현황
     List<PositionDTO> selectAllPosition();
     // 결제 관리
     List<PaymentDTO> selectAllPayment();

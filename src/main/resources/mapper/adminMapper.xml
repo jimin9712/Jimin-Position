@@ -93,6 +93,40 @@
         <include refid="CorporationSearch"/>
     </select>
 
+    <!-- 지원 현황 관리 -->
+    <!-- 지원 현황 -->
+    <sql id="ApplySearch">
+        <where>
+            <if test="search.keyword != null and search.keyworkd != ''">
+                and (
+                or c.corporation_name like concat('%', #{search.keyword}, '%')
+                or m.member_name like concat('%', #{search.keyword}, '%')
+                or m.member_phone like concat('%', #{search.keyword}, '%')
+                or a.apply_type like cconcat('%', ##{search.keyword}, '%')
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectAllApply">
+        select c.corporation_name, a.created_date, n.notice_title, m.member_name, m.member_phone, a.apply_type, a.apply_status
+        from tbl_apply a
+        join tbl_notice n on a.notice_id = n.id
+        join tbl_corporation c on n.corporation_id = c.id
+        join tbl_resume r on a.resume_id = r.id
+        join tbl_member m on r.member_id = m.id
+        order by a.created_date desc
+        limit #{pagination.startRow}, #{pagination.rowCount}
+    </select>
+
+    <select id="selectApplyTotal">
+        select count(*) from tbl_apply
+    </select>
+
+    <select id="selectTotalWithApplySearch">
+        select count(*) from tbl_apply
+        <include refid="ApplySearch"/>
+    </select>
     <!-- 문의 관리 -->
     <!-- 일반 문의 목록 페이징 -->
     <sql id="MemberInquirySearch">

@@ -52,10 +52,11 @@ const memberService = (() => {
 
 const applyService = (() => {
     // 지원 현황 데이터를 서버에서 가져오는 비동기 함수
-    const fetchApply = async (callback) => {
+    const fetchApply = async (page, keyword = "", sortType = "", callback) => {
         try {
+            page = page || 1;
             // /position/apply 경로로 GET 요청
-            const response = await fetch('/position/apply');
+            const response = await fetch(`/position/apply/${page}?keyword=${keyword}&types=${sortType}`);
 
             // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('지원 현황 fetch 실패');
@@ -64,8 +65,8 @@ const applyService = (() => {
             const applyData = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback) {
-                callback(applyData);
+            if (callback && applyData.applys && applyData.pagination) {
+                callback({ applys: applyData.applys, pagination: applyData.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
@@ -74,10 +75,11 @@ const applyService = (() => {
     };
 
     // 면접 현황 데이터를 서버에서 가져오는 비동기 함수
-    const fetchInterview = async (callback) => {
+    const fetchInterview = async (page, keyword = "", sortType = "", callback) => {
         try {
+            page = page || 1;
             // /position/interview 경로로 GET 요청
-            const response = await fetch('/position/interview');
+            const response = await fetch(`/position/interview/${page}?keyword=${keyword}&types=${sortType}`);
 
             // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('면접 현황 fetch 실패');
@@ -86,8 +88,8 @@ const applyService = (() => {
             const interviewData = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback) {
-                callback(interviewData);
+            if (callback && interviewData.interviews && interviewData.pagination) {
+                callback({ interviews: interviewData.interviews, pagination: interviewData.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
@@ -96,10 +98,11 @@ const applyService = (() => {
     };
 
     // 인턴십 현황 데이터를 서버에서 가져오는 비동기 함수
-    const fetchPosition = async (callback) => {
+    const fetchPosition = async (page, keyword = "", sortType = "", callback) => {
         try {
+            page = page || 1;
             // /positoin/position 경로로 GET 요청
-            const response = await fetch('/position/position');
+            const response = await fetch(`/position/position/${page}?keyword=${keyword}&types=${sortType}`);
 
             // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('인턴십 현황 fetch 실패');
@@ -108,8 +111,8 @@ const applyService = (() => {
             const positionData = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback) {
-                callback(positionData);
+            if (callback && positionData.positions && positionData.pagination) {
+                callback({ positions: positionData.positions, pagination: positionData.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
@@ -118,12 +121,10 @@ const applyService = (() => {
     };
 
     // 각 함수들을 객체로 반환하여 외부에서 사용할 수 있도록 함
-    return {
-        fetchApply: fetchApply,
-        fetchInterview: fetchInterview,
-        fetchPosition: fetchPosition
-    };
+    return { fetchApply: fetchApply, fetchInterview: fetchInterview, fetchPosition: fetchPosition };
 })();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 지원 현황 데이터를 표시하는 함수
 const displayApplys = (applys) => {

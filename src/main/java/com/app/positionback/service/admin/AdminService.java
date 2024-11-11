@@ -1,6 +1,7 @@
 package com.app.positionback.service.admin;
 
 import com.app.positionback.domain.apply.ApplyDTO;
+import com.app.positionback.domain.apply.ApplyListDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
 import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
@@ -30,8 +31,13 @@ public interface AdminService {
     public int getCorporationTotal();
     public int getTotalWithCorporationSearch(Search search);
     // 지원 현황 관리
-    List<ApplyDTO> getApplys();
+    // 지원 현황
+    public ApplyListDTO getApplys(int page, Pagination pagination, Search search);
+    public int getApplyTotal();
+    public int getTotalWithApplySearch(Search search);
+    // 면접 현황
     List<InterviewDTO> getInterviews();
+    // 포지션 현황
     List<PositionDTO> getPositions();
     // 결제 관리
     List<PaymentDTO> getPayments();

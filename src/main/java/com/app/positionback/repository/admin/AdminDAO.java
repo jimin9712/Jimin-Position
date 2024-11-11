@@ -61,9 +61,20 @@ public class AdminDAO {
 
     // 지원현황 관리
     // 지원 현황 조회
-    public List<ApplyDTO> applyInformation() {
-        return adminMapper.selectAllApply();
+    public List<ApplyDTO> applyInformation(Pagination pagination, Search search) {
+        return adminMapper.selectAllApply(pagination, search);
     }
+
+    // 지원 현황 전체 개수 조회
+    public int getApplyTotal() {
+        return adminMapper.selectApplyTotal();
+    }
+
+    // 지원 현황 검색 결과 전체 조회
+    public int getTotalWithApplySearch(Search search) {
+        return adminMapper.selectTotalWithApplySearch(search);
+    }
+
     // 면접 현황 조회
     public List<InterviewDTO> interviewInformation() {
         return adminMapper.selectAllInterview();
