@@ -10,6 +10,10 @@ create table tbl_post (
         references tbl_member(id)
 );
 
+select * from tbl_post;
+
+delete from tbl_post
+where id = 5;
 
 show databases ;
 

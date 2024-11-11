@@ -23,8 +23,14 @@
                 AND (post_title LIKE CONCAT('%', #{search.keyword}, '%') OR post_content LIKE CONCAT('%', #{search.keyword}, '%'))
             </if>
         </where>
-        ORDER BY created_date DESC
-        LIMIT 0, 10
+        ORDER BY
+        <choose>
+            <when test="pagination.order == '최신순'">created_date DESC</when>
+            <when test="pagination.order == '조회수순'">post_read_count DESC</when>
+            <when test="pagination.order == '댓글많은순'">post_comment_count DESC</when>
+            <otherwise>created_date DESC</otherwise>
+        </choose>
+        LIMIT #{pagination.startRow}, #{pagination.rowCount}
     </select>
 
     <select id="selectFilterAll" resultType="postDTO">

@@ -99,4 +99,32 @@ INSERT INTO tbl_member (
              '555-123-4567'
          );
 >>>>>>> newtest
+INSERT INTO tbl_member (
+    member_name,
+    member_email,
+    member_password,
+    member_address,
+    member_address_detail,
+    member_nickname,
+    member_phone
+) VALUES
+      (
+          '이지민',
+          'hong@example.com',
+          'password123',
+          '서울특별시 강남구',
+          '청담동 123-4',
+          '홍길동',
+          '010-1234-5678'
+      ),
+      (
+          '용호중',
+          'kim@example.com',
+          'password456',
+          '서울특별시 종로구',
+          '사직로 1-2',
+          '철수',
+          '010-8765-4321'
+      );
+
 

@@ -1,183 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/static/css/main.css" />
-        <link rel="stylesheet" href="/static/css/community/post-write.css" />
-        <title>게시글 작성</title>
-    </head>
-    <body>
-        <div id="position-section" class="layout-full">
-            <div id="position-wrap">
-                <div id="content">
-                    <div class="company-honest-qna">
-                        <div class="contents-container qna-write-wrap">
-                            <div class="qna-write-selection">
-                                <span class="qna-category-tit">카테고리</span>
-                                <div class="box-qna-category">
-                                    <button
-                                        type="button"
-                                        class="btn-category-select"
-                                    >
-                                        면접
-                                    </button>
-                                    <ul class="list-qna-category">
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="신입"
-                                            >
-                                                <span>신입</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="취준"
-                                            >
-                                                <span>취준</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="채용공고"
-                                            >
-                                                <span>채용공고</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="자소서"
-                                            >
-                                                <span>자소서</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="면접"
-                                            >
-                                                <span>면접</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                            >
-                                                <span>Q&amp;A</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="커리어"
-                                            >
-                                                <span>커리어</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="이직"
-                                            >
-                                                <span>이직</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="퇴사"
-                                            >
-                                                <span>퇴사</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="javascript:;"
-                                                class="category"
-                                                data-type="topic"
-                                                data-name="잡담"
-                                            >
-                                                <span>잡담</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="qna-wright-cont">
-                                <input
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/community/post-write.css" />
+    <title>게시글 작성</title>
+</head>
+<body>
+<div id="position-section" class="layout-full">
+    <div id="position-wrap">
+        <div id="content">
+            <div class="company-honest-qna">
+                <div class="contents-container qna-write-wrap">
+                    <div class="qna-write-selection">
+                        <span class="qna-category-tit">✍🏻 게시글 작성</span>
+                    </div>
+                    <form id="postForm" action="/community/post-write" method="post">
+                        <div class="qna-wright-cont">
+                            <input
                                     type="text"
-                                    name="qst-title"
+                                    name="postTitle"
                                     id="qus-title"
-                                    value
                                     class="qna-subject-input"
                                     title="제목 입력"
                                     placeholder="제목을 입력해주세요"
-                                />
-                                <div class="qna-write-post">
-                                    <div
+                                    required
+                            />
+                            <div class="qna-write-post">
+                                <div
                                         class="editor-wrap h-max"
                                         contenteditable="true"
                                         id="qust-detail"
-                                        name="qust-detail"
-                                    ></div>
-                                    <div class="qna-input-bottom">
+                                ></div>
+                                <textarea
+                                        name="postContent"
+                                        id="postContent"
+                                        style="visibility: hidden; height: 0;"
+                                ></textarea>
+                                <div class="qna-input-bottom">
                                         <span class="post-count">
                                             <em>0</em>
                                             /5000자
                                         </span>
-                                    </div>
                                 </div>
-                                <div class="qna-write-tag"></div>
                             </div>
+                            <div class="qna-write-tag"></div>
                         </div>
-                    </div>
-                    <div class="qna-write-foot">
-                        <button
-                            type="button"
-                            class="btn-type size-xl btn-qna-write"
-                        >
-                            게시글 등록
-                        </button>
-                    </div>
+                        <div class="qna-write-foot">
+                            <button
+                                    type="submit"
+                                    class="btn-type size-xl btn-qna-write"
+                            >
+                                게시글 등록
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div id="dimmed" class="position-dimmed"></div>
-        <div class="modal-box layer-qna-alert" id="layer-qna-alert">
-            <div id="alert-text" class="modal-cont">
-                앗! 게시글 제목 입력하고 작성 완료해주세요!
-            </div>
-            <div class="btm-area">
-                <button type="button" class="btn-type size-m btn-confirm">
-                    확인
-                </button>
-            </div>
-            <button type="button" class="btn-close btn-layer-close" onclick="">
-                <span class="blind">닫기</span>
-            </button>
-        </div>
-    </body>
-    <script src="/static/js/community/post-write.js"></script>
+    </div>
+</div>
+<div id="dimmed" class="position-dimmed"></div>
+<div class="modal-box layer-qna-alert" id="layer-qna-alert">
+    <div id="alert-text" class="modal-cont">
+        앗! 게시글 제목 입력하고 작성 완료해주세요!
+    </div>
+    <div class="btm-area">
+        <button type="button" class="btn-type size-m btn-confirm">
+            확인
+        </button>
+    </div>
+    <button type="button" class="btn-close btn-layer-close" onclick="">
+        <span class="blind">닫기</span>
+    </button>
+</div>
+</body>
+<script src="/js/community/post-write.js"></script>
 </html>

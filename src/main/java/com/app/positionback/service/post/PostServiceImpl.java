@@ -24,11 +24,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getList(Pagination pagination, Search search) {
+        // 총 게시글 수를 가져옵니다.
+        int totalPosts = postDAO.getTotalWithSearch(search);
+        pagination.setTotal(totalPosts);
+
         return postDAO.findAll(pagination, search);
     }
-
     @Override
     public List<PostDTO> getFilterList(Pagination pagination, Search search) {
+        int totalPosts = postDAO.getTotalWithFilter(search, "filterColumn");
+        pagination.setTotal(totalPosts);
+
         return postDAO.findFilterAll(pagination, search);
     }
 
@@ -56,6 +62,8 @@ public class PostServiceImpl implements PostService {
     public int getTotalWithSearch(Search search) {
         return postDAO.getTotalWithSearch(search);
     }
+
+
     @Override
     public int getTotalWithFilter(Search search, String filterType) {
         return postDAO.getTotalWithFilter(search, filterType);
