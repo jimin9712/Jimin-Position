@@ -178,7 +178,7 @@ public class AdminController {
             pagination.setTotal(adminService.getCorporationInquiryTotal());
         }
         pagination.progress();
-        return adminService.getMemberInquiry(page, pagination, search);
+        return adminService.getCorporationInquiry(page, pagination, search);
     }
 
     // 신고 관리

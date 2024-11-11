@@ -1,8 +1,7 @@
-// DOM 요소 가져오기
+// 회원 관리
 // 모든 목록 컨테이너를 가져옴
 const listContainers = document.querySelectorAll(".UserTable_container");
 const paginationLists = document.querySelectorAll(".pagination-list");
-
 // 일반 회원 목록과 기업 회원 목록을 구분
 const MemberListLayout = listContainers[0]; // 첫 번째 컨테이너가 일반 회원 목록
 const CorporationListLayout = listContainers[1]; // 두 번째 컨테이너가 기업 회원 목록
@@ -258,6 +257,8 @@ const showCorporationList = ( { corporations, pagination } ) => {
     // 페이지네이션을 동적으로 추가
     CorporationListPaging.innerHTML = pagingText;
 };
+
+//
 
 
 
