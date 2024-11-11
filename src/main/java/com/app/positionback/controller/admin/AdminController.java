@@ -10,12 +10,14 @@ import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
 import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
+import com.app.positionback.domain.interview.InterviewListDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberDTO;
 import com.app.positionback.domain.member.MemberListDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.payment.PaymentDTO;
 import com.app.positionback.domain.position.PositionDTO;
+import com.app.positionback.domain.position.PositionListDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.service.admin.AdminService;
@@ -101,14 +103,33 @@ public class AdminController {
     // 면접 현황
     @GetMapping("/position/interview")
     @ResponseBody
-    public List<InterviewDTO> getInterviews(){
-        return adminService.getInterviews();
+    public InterviewListDTO getInterviews(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if (search.getTypes() == null || search.getTypes().length == 0) {
+            search.setTypes(new String[]{"recent"});
+        }
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithInterviewSearch(search));
+        } else {
+            pagination.setTotal(adminService.getInterviewTotal());
+        }
+        pagination.progress();
+        return adminService.getInterviews(page, pagination, search);
     }
+
     // 인턴십 현황
     @GetMapping("/position/position")
     @ResponseBody
-    public List<PositionDTO> getPositions(){
-        return adminService.getPositions();
+    public PositionListDTO getPositions(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if (search.getTypes() == null || search.getTypes().length == 0) {
+            search.setTypes(new String[]{"recent"});
+        }
+        if (search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(adminService.getTotalWithPositionSearch(search));
+        } else {
+            pagination.setTotal(adminService.getPositionTotal());
+        }
+        pagination.progress();
+        return adminService.getPositions(page, pagination, search);
     }
 
     // 결제 관리

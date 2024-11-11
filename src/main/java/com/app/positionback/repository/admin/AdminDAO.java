@@ -76,12 +76,33 @@ public class AdminDAO {
     }
 
     // 면접 현황 조회
-    public List<InterviewDTO> interviewInformation() {
-        return adminMapper.selectAllInterview();
+    public List<InterviewDTO> interviewInformation(Pagination pagination, Search search) {
+        return adminMapper.selectAllInterview(pagination, search);
     }
-    // 인턴십 현황 조회
-    public List<PositionDTO> positionInformation() {
-        return adminMapper.selectAllPosition();
+
+    // 면접 현황 전체 개수 조회
+    public int getInterviewTotal() {
+        return adminMapper.selectInterviewTotal();
+    }
+
+    // 면접 현황 검색 결과 전체 조회
+    public int getTotalWithInterviewSearch(Search search) {
+        return adminMapper.selectTotalWithInterviewSearch(search);
+    }
+
+    // 포지션 현황 조회
+    public List<PositionDTO> positionInformation(Pagination pagination, Search search) {
+        return adminMapper.selectAllPosition(pagination, search);
+    }
+
+    // 포지션 현황 전체 인원 조회
+    public int getPositionTotal() {
+        return adminMapper.selectPositionTotal();
+    }
+
+    // 포지션 현황 검색 결과 전체 조회
+    public int getTotalWithPositionSearch(Search search) {
+        return adminMapper.selectTotalWithPositionSearch(search);
     }
 
     // 결제 관리

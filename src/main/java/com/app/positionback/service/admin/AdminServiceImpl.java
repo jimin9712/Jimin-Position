@@ -9,11 +9,13 @@ import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryDTO;
 import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
+import com.app.positionback.domain.interview.InterviewListDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberListDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.payment.PaymentDTO;
 import com.app.positionback.domain.position.PositionDTO;
+import com.app.positionback.domain.position.PositionListDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.repository.admin.AdminDAO;
@@ -109,13 +111,52 @@ public class AdminServiceImpl implements AdminService {
         return adminDAO.getTotalWithApplySearch(search);
     }
 
-    // 면접 현황
-    public List<InterviewDTO> getInterviews() {
-        return adminDAO.interviewInformation();
+    // 면접 현황 조회
+    @Override
+    public InterviewListDTO getInterviews(int page, Pagination pagination, Search search) {
+        InterviewListDTO interviewListDTO = new InterviewListDTO();
+        pagination.setPage(page);
+        pagination.setTotal(adminDAO.getInterviewTotal());
+        pagination.progress();
+        interviewListDTO.setPagination(pagination);
+        interviewListDTO.setInterviews(adminDAO.interviewInformation(pagination, search));
+        return interviewListDTO;
     }
-    // 인턴십 현황
-    public List<PositionDTO> getPositions() {
-        return adminDAO.positionInformation();
+
+    // 면접 현황 전체 개수 조회
+    @Override
+    public int getInterviewTotal() {
+        return adminDAO.getInterviewTotal();
+    }
+
+    // 면접 현황 검색 결과 전체 조회
+    @Override
+    public int getTotalWithInterviewSearch(Search search) {
+        return adminDAO.getTotalWithInterviewSearch(search);
+    }
+
+    // 포지션 현황 조회
+    @Override
+    public PositionListDTO getPositions(int page, Pagination pagination, Search search) {
+        PositionListDTO positionListDTO = new PositionListDTO();
+        pagination.setPage(page);
+        pagination.setTotal(adminDAO.getPositionTotal());
+        pagination.progress();
+        positionListDTO.setPagination(pagination);
+        positionListDTO.setPositions(adminDAO.positionInformation(pagination, search));
+        return positionListDTO;
+    }
+
+    // 포지션 현황 전체 개수 조회
+    @Override
+    public int getPositionTotal() {
+        return adminDAO.getPositionTotal();
+    }
+
+    // 포지션 현황 검색 결과 전체 조회
+    @Override
+    public int getTotalWithPositionSearch(Search search) {
+        return adminDAO.getTotalWithPositionSearch(search);
     }
 
     // 결제 관리

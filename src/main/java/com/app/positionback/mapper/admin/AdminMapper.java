@@ -42,9 +42,13 @@ public interface AdminMapper {
     public int selectApplyTotal();
     public int selectTotalWithApplySearch(@Param("search")Search search);
     // 면접 현황
-    List<InterviewDTO> selectAllInterview();
+    public List<InterviewDTO> selectAllInterview(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    public int selectInterviewTotal();
+    public int selectTotalWithInterviewSearch(@Param("search")Search search);
     // 포지션 현황
-    List<PositionDTO> selectAllPosition();
+    public List<PositionDTO> selectAllPosition(@Param("pagination") Pagination pagination, @Param("search")Search search);
+    public int selectPositionTotal();
+    public int selectTotalWithPositionSearch(@Param("search")Search search);
     // 결제 관리
     List<PaymentDTO> selectAllPayment();
     // 작성 관리

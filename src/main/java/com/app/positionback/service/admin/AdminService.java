@@ -8,11 +8,13 @@ import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
 import com.app.positionback.domain.inquiry.InquiryListDTO;
 import com.app.positionback.domain.interview.InterviewDTO;
+import com.app.positionback.domain.interview.InterviewListDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberListDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.payment.PaymentDTO;
 import com.app.positionback.domain.position.PositionDTO;
+import com.app.positionback.domain.position.PositionListDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
 import com.app.positionback.utill.Pagination;
@@ -36,9 +38,13 @@ public interface AdminService {
     public int getApplyTotal();
     public int getTotalWithApplySearch(Search search);
     // 면접 현황
-    List<InterviewDTO> getInterviews();
+    public InterviewListDTO getInterviews(int page, Pagination pagination, Search search);
+    public int getInterviewTotal();
+    public int getTotalWithInterviewSearch(Search search);
     // 포지션 현황
-    List<PositionDTO> getPositions();
+    public PositionListDTO getPositions(int page, Pagination pagination, Search search);
+    public int getPositionTotal();
+    public int getTotalWithPositionSearch(Search search);
     // 결제 관리
     List<PaymentDTO> getPayments();
     // 작성 관리
