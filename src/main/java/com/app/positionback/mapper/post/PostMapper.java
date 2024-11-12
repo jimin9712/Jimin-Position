@@ -22,12 +22,14 @@ public interface PostMapper {
     public List<PostDTO> selectFilterAll(@Param("pagination") Pagination pagination, @Param("search")Search search);
 
     public int selectTotalWithSearch(@Param("search") Search search);
-    public int selectTotalWithFilter(@Param("search") Search search, @Param("filterType") String filterType);
 
 
     public int selectCount();
 
     public void update(PostVO postVO);
+
+    public void incrementReadCount(Long id);
+
 
     public void delete(Long id);
 

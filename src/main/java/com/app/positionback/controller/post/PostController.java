@@ -13,64 +13,81 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/community/*")
+@RequestMapping("/community")
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/community/community-post-list-check")
+    @GetMapping("/community-post-list-check")
     @ResponseBody
-    public Map<String, Object> getPostList(Pagination pagination, Search search,
-                                           @RequestParam(required = false) String query,
-                                           @RequestParam(required = false) String filterType) {
-        search.setKeyword(query);
-
-        int total;
-
-        // 기본 최신순
-        if (filterType == null || filterType.equals("최신순")) {
-            pagination.setOrder("최신순");
-            total = postService.getTotalWithSearch(search);
-        } else if (filterType.equals("조회수순")) {
-            pagination.setOrder("조회수순");
-            total = postService.getTotalWithSearch(search);
-        } else if (filterType.equals("댓글 많은 순")) {
-            pagination.setOrder("댓글 많은 순");
-            total = postService.getTotalWithSearch(search);
-        } else {
-            total = 0;  // 잘못된 필터 타입 처리
+    public PostDTO getPostList(Pagination pagination, Search search,
+                               @RequestParam(required = false) String query,
+                               @RequestParam(required = false) String filterType,
+                               @RequestParam(required = false, defaultValue = "1") int page) {
+        // 검색어 길이 제한
+        if (query != null && query.length() > 10) {
+            throw new IllegalArgumentException("검색어가 너무 깁니다.");
         }
 
-        pagination.setTotal(total);
-        pagination.progress();
+        search.setKeyword(query);
+        pagination.setPage(page);
 
-        List<PostDTO> posts = postService.getList(pagination, search);  // 필터에 맞는 게시글 목록 불러오기
+        // 필터 타입에 따라 정렬 조건 설정
+        if (filterType == null || filterType.equals("최신순")) {
+            pagination.setOrder("최신순");
+        } else if (filterType.equals("조회수순")) {
+            pagination.setOrder("조회수순");
+        } else if (filterType.equals("댓글 많은 순")) {
+            pagination.setOrder("댓글 많은 순");
+        } else {
+            pagination.setOrder("최신순"); // 기본값 설정
+        }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("posts", posts);
-        result.put("pagination", pagination);
-        result.put("total", total);
+        int total = 0;
+        List<PostDTO> posts = List.of();
 
-        return result;
+        boolean isSearch = search.getKeyword() != null && !search.getKeyword().isEmpty();
+
+        PostDTO response = new PostDTO();
+
+        if (isSearch) {
+            total = postService.getTotalWithSearch(search);
+            posts = postService.getList(pagination, search);
+            response.setTotal(total);
+            response.setPagination(pagination);
+        } else if (filterType != null && (filterType.equals("최신순") || filterType.equals("조회수순") || filterType.equals("댓글 많은 순"))) {
+            posts = postService.getFilterList(pagination, search);
+            response.setPagination(pagination);
+        } else {
+
+            posts = postService.getFilterList(pagination, search);
+            response.setPagination(pagination);
+        }
+
+        response.setPosts(posts);
+
+        log.debug("Total: {}", total);
+        log.debug("Pagination: {}", pagination);
+        log.debug("Posts: {}", posts);
+
+        return response;
     }
 
     @GetMapping("/community-post-list")
-    public List<PostDTO> goTocommunityPostList(Pagination pagination, Search search) {
-        return postService.getList(pagination, search);
+    public String goToCommunityPostList() {
+        return "community/community-post-list";
     }
-
 
     @GetMapping("/post-write")
     public String goToPostWrite(PostDTO postDTO) {
         return "community/post-write";
     }
+
     @PostMapping("/post-write")
     public RedirectView postWrite(PostDTO postDTO, RedirectAttributes redirectAttributes) {
         postDTO.setMemberId(2L);
@@ -97,21 +114,18 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<PostDTO> getPostDetails(@PathVariable("id") Long postId) {
         try {
-            // 게시글의 상세 내용 조회
+
             Optional<PostDTO> post = postService.getById(postId);
 
-            // 게시글이 없을 경우 404 Not Found 반환
+            // 게시글이 없을 경우 404
             if (post.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(post.get());  // 게시글 존재시 반환
+            return ResponseEntity.ok(post.get());
         } catch (Exception e) {
             log.error("Error fetching post details", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();  // 서버 오류 발생 시
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
 }
-
-
-

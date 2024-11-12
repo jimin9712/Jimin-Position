@@ -14,7 +14,7 @@ public class PostVO {
     private Long memberId;
     private String postTitle;
     private String postContent;
-    private String postReadCount;
+    private int postReadCount;
     private String createdDate;
     private String updatedDate;
 

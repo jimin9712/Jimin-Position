@@ -22,7 +22,7 @@ public class PostTests {
         postDTO.setMemberId(1L);
         postDTO.setPostTitle("테스트 제목");
         postDTO.setPostContent("테스트 내용");
-        postDTO.setPostReadCount(String.valueOf(200));
+        postDTO.setPostReadCount(99);
 
         postService.write(postDTO.toVO());
         log.info("게시글이 성공적으로 저장되었습니다.");

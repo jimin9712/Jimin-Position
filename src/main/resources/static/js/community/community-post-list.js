@@ -48,14 +48,18 @@ function getSelectedFilters() {
 function renderPosts(data) {
     const posts = data.posts;
     const pagination = data.pagination;
-    const totalCount = data.total;  // 전체 게시글 수 받아오기
+    // totalCount가 null일 경우 pagination.total을 사용
+    const totalCount = data.total !== null && data.total !== undefined ? data.total : (pagination && pagination.total ? pagination.total : 0);
     const postList = document.getElementById("qst-and-ans-list");
     postList.innerHTML = ""; // 기존 항목 초기화하여 중복 추가 방지
 
-    const listNumTitle = document.querySelector(".list-num-tit strong");
-    listNumTitle.textContent = totalCount.toLocaleString();
+    // totalCount가 존재하는 경우에만 표시
+    if (totalCount !== null && totalCount !== undefined) {
+        const listNumTitle = document.querySelector(".list-num-tit strong");
+        listNumTitle.textContent = totalCount.toLocaleString();
+    }
 
-    if (posts.length === 0) {
+    if (!posts || posts.length === 0) {
         const noPostsMessage = document.createElement('li');
         noPostsMessage.innerText = "게시글이 없습니다.";
         postList.appendChild(noPostsMessage);
@@ -63,19 +67,25 @@ function renderPosts(data) {
         posts.forEach((post) => {
             const listItem = document.createElement("li");
 
-            const hotLabel = post.postReadCount && post.postReadCount > 100 ? `<em class="label hot">HOT</em>` : "";
+            // createdDate가 null인 경우 처리
+            let formattedDate = "날짜 정보 없음";
+            if (post.createdDate) {
+                const date = new Date(post.createdDate);
+                if (!isNaN(date)) {
+                    formattedDate = date.toLocaleDateString();
+                }
+            }
 
             listItem.innerHTML = `
                 <div class="qna-subject-wrap">
-                    ${hotLabel}
-                    <span class="qna-subject">${post.postTitle}</span>
+                    <span class="qna-subject">${escapeHtml(post.postTitle)}</span>
                 </div>
-                <span class="qna-desc">${post.postContent}</span>
+                <span class="qna-desc">${escapeHtml(post.postContent)}</span>
                 <div class="qna-data-infos">
-                    <span class="qna-info qna-reply">댓글 <strong>0</strong></span>
+                    <span class="qna-info qna-reply">댓글 <strong>${post.postReplyCount || 0}</strong></span>
                     <span class="qna-info qna-view">조회 <strong>${post.postReadCount || 0}</strong></span>
                     <div class="qna-member-info">
-                        <span class="qna-from">회원 ID ${post.memberId}님이 ${post.createdDate}</span>
+                        <span class="qna-from">회원 ID ${post.memberId || '알 수 없음'}님이 ${formattedDate}</span>
                     </div>
                 </div>
             `;
@@ -88,21 +98,35 @@ function renderPosts(data) {
         });
     }
 
-    renderPagination(pagination); // 페이지네이션 생성
+    if (pagination) {
+        renderPagination(pagination, totalCount); // 페이지네이션 생성
+    }
+}
+
+// HTML 이스케이프 함수 (보안 강화)
+function escapeHtml(text) {
+    if (typeof text !== 'string') return text;
+    return text.replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        })[s];
+    });
 }
 
 // 페이지네이션 렌더링 함수
-function renderPagination(pagination) {
+function renderPagination(pagination, total) {
     const paginationElement = document.getElementById("page-box");
     paginationElement.innerHTML = ""; // 기존 페이지네이션 초기화
 
-    // 데이터가 없으면 페이지네이션을 렌더링하지 않음
-    if (pagination.total === 0) {
-        return;
-    }
-
     // `realEnd` 값 계산 (페이지네이션 끝값 계산)
-    pagination.realEnd = Math.ceil(pagination.total / pagination.rowCount);
+    const realEnd = Math.ceil((total || 1) / pagination.rowCount);
 
     // 이전 버튼
     if (pagination.prev) {
@@ -118,7 +142,7 @@ function renderPagination(pagination) {
     }
 
     // 필요한 페이지 버튼만 렌더링 (페이지 수가 많으면 페이지 버튼을 제한)
-    for (let i = pagination.startPage; i <= pagination.realEnd && i <= pagination.endPage; i++) {
+    for (let i = pagination.startPage; i <= realEnd && i <= pagination.endPage; i++) {
         const pageButton = document.createElement("a");
         pageButton.classList.add("btn-type", "size-s");
         pageButton.textContent = i;
@@ -148,16 +172,21 @@ function renderPagination(pagination) {
 
 // 서버에서 게시글과 페이징 정보 불러오기
 function fetchPosts(page = 1, searchQuery = '', selectedFilter = '최신순') {
-    const url = `/community/community-post-list-check?page=${page}&search=${encodeURIComponent(searchQuery)}&filterType=${encodeURIComponent(selectedFilter)}`;
+    const url = `/community/community-post-list-check?page=${page}&query=${encodeURIComponent(searchQuery)}&filterType=${encodeURIComponent(selectedFilter)}`;
 
     fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.posts && data.pagination) {
-                renderPosts(data);
-            } else {
-                console.error("Invalid response structure:", data);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`서버 응답 오류: ${response.status}`);
             }
+            return response.json();
         })
-        .catch(error => console.error("Error fetching posts:", error));
+        .then(data => {
+            console.log("Fetched data:", data); // 디버깅을 위한 로그 추가
+            renderPosts(data);
+        })
+        .catch(error => {
+            console.error("Error fetching posts:", error);
+            alert("게시글을 불러오는 데 문제가 발생했습니다.");
+        });
 }

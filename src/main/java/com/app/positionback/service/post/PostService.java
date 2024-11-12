@@ -21,7 +21,6 @@ public interface PostService {
 
     public int getTotal();
     public int getTotalWithSearch(Search search);
-    public int getTotalWithFilter(Search search,String filterType);
 
 
 }

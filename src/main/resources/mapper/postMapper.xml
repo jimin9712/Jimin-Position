@@ -33,20 +33,36 @@
         LIMIT #{pagination.startRow}, #{pagination.rowCount}
     </select>
 
-    <select id="selectFilterAll" resultType="postDTO">
-        SELECT id, member_id as memberId, post_title as postTitle, post_content as postContent,
-        post_read_count as postReadCount, created_date as createdDate, updated_date as updatedDate
-        FROM tbl_post
+    <select id="selectFilterAll" resultType="com.app.positionback.domain.post.PostDTO">
+        SELECT
+        p.id,
+        p.member_id as memberId,
+        p.post_title as postTitle,
+        p.post_content as postContent,
+        p.post_read_count as postReadCount,
+        p.created_date as createdDate,
+        p.updated_date as updatedDate,
+        IFNULL(r.reply_count, 0) as postReplyCount
+        FROM tbl_post p
+        LEFT JOIN (
+        SELECT post_id, COUNT(*) as reply_count
+        FROM tbl_reply
+        GROUP BY post_id
+        ) r ON p.id = r.post_id
         <where>
-            <if test="search.keyword != null">
-                AND (post_title LIKE CONCAT('%', #{search.keyword}, '%') OR post_content LIKE CONCAT('%', #{search.keyword}, '%'))
-            </if>
-            <if test="search.filter != null">
-                AND filter_column = #{search.filter}
+            <if test="search.keyword != null and search.keyword != ''">
+                AND (p.post_title LIKE CONCAT('%', #{search.keyword}, '%')
+                OR p.post_content LIKE CONCAT('%', #{search.keyword}, '%'))
             </if>
         </where>
-        ORDER BY created_date DESC
-        limit #{pagination.startRow}, #{pagination.rowCount};
+        ORDER BY
+        <choose>
+            <when test="pagination.order == '최신순'">p.created_date DESC</when>
+            <when test="pagination.order == '조회수순'">p.post_read_count DESC</when>
+            <when test="pagination.order == '댓글 많은 순'">postReplyCount DESC</when>
+            <otherwise>p.created_date DESC</otherwise>
+        </choose>
+        LIMIT #{pagination.startRow}, #{pagination.rowCount}
     </select>
 
     <select id="selectTotalWithSearch" resultType="int">
@@ -66,6 +82,13 @@
     <update id="update" parameterType="postVO">
         UPDATE tbl_post
         SET post_title = #{postTitle}, post_content = #{postContent}, post_read_count = #{postReadCount}, updated_date = current_timestamp
+        WHERE id = #{id}
+    </update>
+
+    <update id="incrementReadCount" parameterType="Long">
+        UPDATE tbl_post
+        SET post_read_count = post_read_count + 1,
+            updated_date = current_timestamp
         WHERE id = #{id}
     </update>
 
