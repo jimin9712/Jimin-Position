@@ -26,14 +26,22 @@ const memberService = (() => {
         }
     };
 
-    const fetchCorporationMembers = async (callback) => {
+    const fetchCorporationMembers = async (page, keyword="",callback) => {
         try {
-            const response = await fetch('/admin/position/corporation-members');
+            page = page || 1;
+            const response = await fetch(`/admin/position/corporation-members/${page}?keyword=${keyword}`);
+
+            // 응답 실패 상태일 경우 에러 메시지
             if (!response.ok) throw new Error('기업 회원 정보 fetch 실패');
 
-            const corporationMembers = await response.json();
-            if (callback) {
-                callback(corporationMembers);
+            // 응답 데이터를 JSON으로 받음
+            const data = await response.json();
+
+            // 데이터가 유효한 경우 콜백 호출
+            if (callback && data.corporations && data.pagination) {
+                callback( { corporations: data.corporations, pagination: data.pagination });
+            } else {
+                console.error("응답 데이터 형식이 올바르지 않습니다.")
             }
         } catch (error) {
             console.error("오류입니다:", error);

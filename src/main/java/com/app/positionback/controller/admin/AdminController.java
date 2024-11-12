@@ -73,7 +73,6 @@ public class AdminController {
     @GetMapping("/position/corporation-members/{page}")
     @ResponseBody
     public CorporationListDTO getCorporationMembers(@PathVariable("page") Integer page, Pagination pagination, Search search) {
-        System.out.println("Received keyword: " + search.getKeyword());
         if (search.getKeyword() != null) {
             pagination.setTotal(adminService.getTotalWithCorporationSearch(search));
         } else {

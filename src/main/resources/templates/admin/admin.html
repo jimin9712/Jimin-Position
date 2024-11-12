@@ -415,7 +415,7 @@
                                                 >정지</span
                                             >
                                             <span class="sort-filter-option" data-type="withdrawn"
-                                            >탈퇴</span
+                                                >탈퇴</span
                                             >
                                         </div>
                                         <!-- Action Buttons -->
@@ -424,6 +424,7 @@
                                                 type="text"
                                                 class="Filter_searchInput"
                                                 placeholder="검색어 입력"
+                                                id="memberSearchInput"
                                             />
                                             <button
                                                 id="addServiceBtn"
@@ -621,7 +622,7 @@
                                     </div>
                                 </div>
                                 <nav class="pagination">
-                                    <ul class="pagination-list">
+                                    <ul class="pagination-list member">
                                         <!-- 처음 페이지로 이동하는 버튼 -->
                                         <li class="pagination-first">
                                             <a
@@ -720,6 +721,7 @@
                                                 type="text"
                                                 class="Filter_searchInput"
                                                 placeholder="검색어 입력"
+                                                id="corporationSearchInput"
                                             />
                                             <button
                                                 id="addServiceBtn"
@@ -736,12 +738,12 @@
                                         </div>
                                     </div>
                                     <!-- 여기까지 -->
-                                    <div class="UserTable_container">
+                                    <div class="CorporationTable_container">
                                         <div
-                                            class="UserTable_row UserTable_header"
+                                            class="CorporationTable_row CorporationTable_header"
                                         >
                                             <div
-                                                class="UserTable_cell User-headerCell selectAllCell"
+                                                class="CorporationTable_cell Corporation-headerCell selectAllCell"
                                             >
                                                 <input
                                                     type="checkbox"
@@ -749,167 +751,167 @@
                                                 />
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 기업명
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 가입일
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 이메일
                                             </div>
 
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 주소
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 대표번호
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 사업자번호
                                             </div>
                                             <div
-                                                class="UserTable_cell User-headerCell"
+                                                class="CorporationTable_cell Corporation-headerCell"
                                             >
                                                 Action
                                             </div>
                                         </div>
 
                                         <!-- Example row (Initial data) -->
-                                        <div class="UserTable_row">
-                                            <div class="UserTable_cell">
+                                        <div class="CorporationTable_row">
+                                            <div class="CorporationTable_cell">
                                                 <input
                                                     type="checkbox"
-                                                    class="userCheckbox"
+                                                    class="CorporationCheckbox"
                                                 />
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 쿠팡(주)
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 2024-01-01
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 coopang@google.com
                                             </div>
 
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 서울 강남구 태헤란로 244-10
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 010-1234-1234
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 052-12-12345
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 <button class="editBtn">
                                                     수정
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="UserTable_row">
-                                            <div class="UserTable_cell">
+                                        <div class="CorporationTable_row">
+                                            <div class="CorporationTable_cell">
                                                 <input
                                                     type="checkbox"
-                                                    class="userCheckbox"
+                                                    class="CorporationCheckbox"
                                                 />
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 롯데자인언츠(주)
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 1982-02-12
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 LotteGiants@google.com
                                             </div>
 
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 부산광역시 동래구 사직로 45
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 010-1234-1234
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 052-12-12345
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 <button class="editBtn">
                                                     수정
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="UserTable_row">
-                                            <div class="UserTable_cell">
+                                        <div class="CorporationTable_row">
+                                            <div class="CorporationTable_cell">
                                                 <input
                                                     type="checkbox"
-                                                    class="userCheckbox"
+                                                    class="CorporationCheckbox"
                                                 />
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 챔프스터디(주)
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 2024-01-01
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 champstudy@google.com
                                             </div>
 
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 서울 서초구 강남대로61길 23
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 010-1234-1234
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 752-12-12345
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 <button class="editBtn">
                                                     수정
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="UserTable_row">
-                                            <div class="UserTable_cell">
+                                        <div class="CorporationTable_row">
+                                            <div class="CorporationTable_cell">
                                                 <input
                                                     type="checkbox"
-                                                    class="userCheckbox"
+                                                    class="CorporationCheckbox"
                                                 />
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 한국전력공사
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 2024-01-01
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 kepco@google.com
                                             </div>
 
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 전남 나주시 전력로 55
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 010-1234-1234
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 863-12-12345
                                             </div>
-                                            <div class="UserTable_cell">
+                                            <div class="CorporationTable_cell">
                                                 <button class="editBtn">
                                                     수정
                                                 </button>
@@ -918,7 +920,7 @@
                                     </div>
                                 </div>
                                 <nav class="pagination">
-                                    <ul class="pagination-list">
+                                    <ul class="pagination-list corporation">
                                         <!-- 처음 페이지로 이동하는 버튼 -->
                                         <li class="pagination-first">
                                             <a
