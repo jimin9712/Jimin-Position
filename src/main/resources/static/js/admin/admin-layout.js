@@ -4,12 +4,17 @@ const MemberListLayout = document.querySelector(".UserTable_container"); // 회�
 const MemberListPaging = document.querySelector(".pagination-list.member"); // 페이지네이션 요소
 const CorporationListLayout = document.querySelector(".CorporationTable_container"); // 기업 회원 목록 표시
 const CorporationPaging = document.querySelector(".pagination-list.corporation"); // 페이지네이션 요소
-const keywordInput = document.querySelector(".Filter_searchInput"); // 검색어 입력 필드
+const memberKeywordInput = document.getElementById("memberSearchInput"); // 검색어 입력 필드
+const corporationKeywordInput = document.getElementById("corporationSearchInput"); // 검색어 입력 필드
 const sortOptions = document.querySelectorAll(".sort-filter-option"); // 정렬 옵션
 let selectedSort = "가입일 순"; // 기본 정렬 설정
 
 // 검색어 초기화
-keywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+// URL 쿼리 문자열에서 "keyword"라는 이름의 매개변수 값을 가져옴
+// 만약 URL에 "keyword" 매개변수가 없다면 기본값으로 빈 문자열("")을 할당함
+// URLSearchParams() : 객체 인스턴스를 반환
+// window.location.search : 현재 페이지의 쿼리 스트링에 접근하여 현재 페이지 URL의 쿼리 스트링 부분을 가져온다.
+memberKeywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
 
 // 정렬 옵션 이벤트 설정
 sortOptions.forEach((option) => {
@@ -27,7 +32,7 @@ sortOptions.forEach((option) => {
 });
 
 // 검색어 입력 시 검색 실행
-keywordInput.addEventListener("input", () => {
+memberKeywordInput.addEventListener("input", () => {
     fetchAndShowMembers(1);
 });
 
@@ -38,7 +43,7 @@ function goToPage(page) {
 
 // 일반 회원 목록을 서버에서 가져오고 화면에 표시
 const fetchAndShowMembers = async (page) => {
-    const keyword = keywordInput.value;
+    const keyword = memberKeywordInput.value;
     const sortType = selectedSort;
 
     try {
@@ -141,8 +146,10 @@ const showMemberList = ( { members, pagination } ) => {
 
 };
 
+corporationKeywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+
 // 검색어 입력 시 검색 실행
-keywordInput.addEventListener("input", () => {
+corporationKeywordInput.addEventListener("input", () => {
     fetchAndShowCorporations(1);
 });
 
@@ -153,7 +160,7 @@ function goToCorPage(page) {
 
 // 일반 회원 목록을 서버에서 가져오고 화면에 표시
 const fetchAndShowCorporations = async (page) => {
-    const keyword = keywordInput.value;
+    const keyword = corporationKeywordInput.value;
     try {
         // 데이터를 서버에서 가져오는 요청
         const response = await fetch(`/admin/position/corporation-members/${page}?keyword=${keyword}`);
@@ -251,8 +258,12 @@ const showCorporationList = ( { corporations, pagination } ) => {
 
     // 페이징을 동적으로 추가
     CorporationPaging.innerHTML = pagingText;
-
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 

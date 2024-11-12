@@ -67,11 +67,11 @@ const applyService = (() => {
             if (!response.ok) throw new Error('지원 현황 fetch 실패');
 
             // 응답 데이터를 JSON으로 변환
-            const applyData = await response.json();
+            const data = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback && applyData.applys && applyData.pagination) {
-                callback({ applys: applyData.applys, pagination: applyData.pagination });
+            if (callback && data.applys && data.pagination) {
+                callback({ applys: data.applys, pagination: data.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
@@ -90,11 +90,11 @@ const applyService = (() => {
             if (!response.ok) throw new Error('면접 현황 fetch 실패');
 
             // 응답 데이터를 JSON으로 변환
-            const interviewData = await response.json();
+            const data = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback && interviewData.interviews && interviewData.pagination) {
-                callback({ interviews: interviewData.interviews, pagination: interviewData.pagination });
+            if (callback && data.interviews && data.pagination) {
+                callback({ interviews: data.interviews, pagination: data.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
@@ -113,11 +113,11 @@ const applyService = (() => {
             if (!response.ok) throw new Error('인턴십 현황 fetch 실패');
 
             // 응답 데이터를 JSON으로 변환
-            const positionData = await response.json();
+            const data = await response.json();
 
             // 콜백 함수가 있을 경우 데이터를 콜백 함수에 전달
-            if (callback && positionData.positions && positionData.pagination) {
-                callback({ positions: positionData.positions, pagination: positionData.pagination });
+            if (callback && data.positions && data.pagination) {
+                callback({ positions: data.positions, pagination: data.pagination });
             }
         } catch (error) {
             // 오류가 발생할 경우 에러 메시지 출력
