@@ -12,11 +12,11 @@ const memberService = (() => {
             if (!response.ok) throw new Error('회원 정보 fetch 실패');
 
             // 응답 데이터를 JSON으로 받음
-            const memberData = await response.json();
+            const data = await response.json();
 
             // 데이터가 유효한 경우 콜백 호출
-            if (callback && memberData.members && memberData.pagination) {
-                callback({ members: memberData.members, pagination: memberData.pagination });
+            if (callback && data.members && data.pagination) {
+                callback({ members: data.members, pagination: data.pagination });
             } else {
                 console.error("응답 데이터 형식이 올바르지 않습니다.");
             }
@@ -26,17 +26,14 @@ const memberService = (() => {
         }
     };
 
-    const fetchCorporationMembers = async (page, keyword = "", callback) => {
+    const fetchCorporationMembers = async (callback) => {
         try {
-            page = page || 1;
-            const response = await fetch(`/admin/position/corporation-members/${page}?keyword=${keyword}`);
+            const response = await fetch('/admin/position/corporation-members');
             if (!response.ok) throw new Error('기업 회원 정보 fetch 실패');
-            const corporationData = await response.json();
 
-            if (callback && corporationData.corporations && corporationData.pagination) {
-                callback({ corporations: corporationData.corporations, pagination: corporationData.pagination});
-            } else {
-                console.error("응답 데이터 형식이 올바르지 않습니다.")
+            const corporationMembers = await response.json();
+            if (callback) {
+                callback(corporationMembers);
             }
         } catch (error) {
             console.error("오류입니다:", error);
