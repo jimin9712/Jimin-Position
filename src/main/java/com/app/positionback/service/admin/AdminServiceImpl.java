@@ -1,20 +1,17 @@
 package com.app.positionback.service.admin;
 
-import com.app.positionback.domain.apply.ApplyDTO;
+
 import com.app.positionback.domain.apply.ApplyListDTO;
 import com.app.positionback.domain.complain.ComplainDTO;
 import com.app.positionback.domain.corporation.CorporationListDTO;
 import com.app.positionback.domain.evaluation.EvaluationCorporationDTO;
 import com.app.positionback.domain.evaluation.EvaluationPositionerDTO;
-import com.app.positionback.domain.inquiry.InquiryDTO;
 import com.app.positionback.domain.inquiry.InquiryListDTO;
-import com.app.positionback.domain.interview.InterviewDTO;
 import com.app.positionback.domain.interview.InterviewListDTO;
 import com.app.positionback.domain.interviewreview.InterviewReviewDTO;
 import com.app.positionback.domain.member.MemberListDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.payment.PaymentDTO;
-import com.app.positionback.domain.position.PositionDTO;
 import com.app.positionback.domain.position.PositionListDTO;
 import com.app.positionback.domain.post.PostDTO;
 import com.app.positionback.domain.reply.ReplyDTO;
@@ -99,7 +96,7 @@ public class AdminServiceImpl implements AdminService {
         return applyListDTO;
     }
 
-    // 지원 현황 전체 개수 조회
+    // 지원 현황 전체 인원 조회
     @Override
     public int getApplyTotal() {
         return adminDAO.getApplyTotal();
@@ -123,7 +120,7 @@ public class AdminServiceImpl implements AdminService {
         return interviewListDTO;
     }
 
-    // 면접 현황 전체 개수 조회
+    // 면접 현황 전체 인원 조회
     @Override
     public int getInterviewTotal() {
         return adminDAO.getInterviewTotal();
@@ -147,7 +144,7 @@ public class AdminServiceImpl implements AdminService {
         return positionListDTO;
     }
 
-    // 포지션 현황 전체 개수 조회
+    // 포지션 현황 전체 인원 조회
     @Override
     public int getPositionTotal() {
         return adminDAO.getPositionTotal();

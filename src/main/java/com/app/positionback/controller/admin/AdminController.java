@@ -116,7 +116,7 @@ public class AdminController {
         return adminService.getInterviews(page, pagination, search);
     }
 
-    // 인턴십 현황
+    // 포지션 현황
     @GetMapping("/position/position")
     @ResponseBody
     public PositionListDTO getPositions(@PathVariable("page") Integer page, Pagination pagination, Search search) {

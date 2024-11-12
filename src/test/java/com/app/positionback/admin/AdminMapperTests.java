@@ -50,4 +50,46 @@ public class AdminMapperTests {
         log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
         adminMapper.selectAllApply(pagination, new Search());
     }
+
+    // 면접 현황 MapperTests
+    @Test
+    public void testSelectAllInterviews() {
+        Pagination pagination = new Pagination();
+        pagination.setTotal(adminMapper.selectInterviewTotal());
+        pagination.progress();
+        log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
+        adminMapper.selectAllInterview(pagination, new Search());
+    }
+
+    // 포지션 현황 MapperTests
+    @Test
+    public void testSelectAllPositions() {
+        Pagination pagination = new Pagination();
+        pagination.setTotal(adminMapper.selectPositionTotal());
+        pagination.progress();
+        log.info("{}, {}", pagination.getStartRow(), pagination.getRowCount());
+        adminMapper.selectAllPosition(pagination, new Search());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
