@@ -15,6 +15,7 @@ public class PostDTO {
     @EqualsAndHashCode.Include
     private Long id;
     private Long memberId;
+    private String memberNickname;
     private String postTitle;
     private String postContent;
     private int postReadCount;
@@ -28,6 +29,6 @@ public class PostDTO {
     private Integer total;
 
     public PostVO toVO() {
-        return new PostVO(id, memberId, postTitle, postContent, postReadCount, createdDate, updatedDate);
+        return new PostVO(id, memberId,memberNickname,postTitle, postContent, postReadCount, createdDate, updatedDate);
     }
 }

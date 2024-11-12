@@ -117,7 +117,7 @@ public class PostController {
 
             Optional<PostDTO> post = postService.getById(postId);
 
-            // 게시글이 없을 경우 404
+            // 게시글이 없을 경우 404 출력
             if (post.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }

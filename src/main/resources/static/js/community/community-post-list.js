@@ -85,7 +85,7 @@ function renderPosts(data) {
                     <span class="qna-info qna-reply">댓글 <strong>${post.postReplyCount || 0}</strong></span>
                     <span class="qna-info qna-view">조회 <strong>${post.postReadCount || 0}</strong></span>
                     <div class="qna-member-info">
-                        <span class="qna-from">회원 ID ${post.memberId || '알 수 없음'}님이 ${formattedDate}</span>
+                        <span class="qna-from">${post.memberNickname || '알 수 없음'} ${formattedDate}</span>
                     </div>
                 </div>
             `;
