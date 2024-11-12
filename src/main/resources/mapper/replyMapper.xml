@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.positionback.mapper.reply.ReplyMapper">
+
+    <insert id="insertReply" parameterType="com.app.positionback.domain.reply.ReplyVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tbl_reply (member_id, post_id, reply_content, created_date, updated_date)
+        VALUES (#{memberId}, #{postId}, #{replyContent}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="selectRepliesByPostId" resultType="replyDTO" parameterType="Long">
+        SELECT
+        r.id,
+        r.member_id,
+        m.member_nickname,
+        r.post_id,
+        r.reply_content,
+        r.created_date,
+        r.updated_date
+        FROM tbl_reply r
+        INNER JOIN tbl_member m ON r.member_id = m.id
+        WHERE r.post_id = #{postId}
+        ORDER BY r.created_date asc
+    </select>
+
+    <select id="selectReplyById" resultType="replyDTO" parameterType="Long">
+        SELECT
+        r.id,
+        r.member_id AS memberId,
+        m.member_nickname AS memberNickname,
+        r.post_id AS postId,
+        r.reply_content AS replyContent,
+        r.created_date AS createdDate,
+        r.updated_date AS updatedDate
+        FROM tbl_reply r
+        INNER JOIN tbl_member m ON r.member_id = m.id
+        WHERE r.id = #{id}
+    </select>
+
+    <update id="updateReply" parameterType="replyVO">
+        UPDATE tbl_reply
+        SET reply_content = #{replyContent}, updated_date = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteReply" parameterType="Long">
+        DELETE FROM tbl_reply WHERE id = #{id}
+    </delete>
+</mapper>
+
+

@@ -19,31 +19,37 @@ public class PostDAO {
     public void save(PostVO postVO) {
         postMapper.insert(postVO);
     }
+
     public Optional<PostDTO> findById(Long id) {
         return postMapper.selectById(id);
     }
+
     public List<PostDTO> findAll(Pagination pagination, Search search) {
         return postMapper.selectAll(pagination, search);
     }
+
     public List<PostDTO> findFilterAll(Pagination pagination, Search search) {
         return postMapper.selectFilterAll(pagination, search);
     }
 
-    public int getTotalWithSearch(Search search){
+    public int getTotalWithSearch(Search search) {
         return postMapper.selectTotalWithSearch(search);
     }
+    
 
-    public int getTotalWithFilter(Search search, String filterType) {
-        return postMapper.selectTotalWithFilter(search, filterType);
-    }
-    public int findCount(){
+    public int findCount() {
         return postMapper.selectCount();
     }
+
     public void update(PostVO postVO) {
         postMapper.update(postVO);
     }
+
     public void delete(Long id) {
         postMapper.delete(id);
     }
 
+    public void incrementReadCount(Long id) {
+        postMapper.incrementReadCount(id);
+    }
 }

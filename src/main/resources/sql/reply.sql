@@ -13,4 +13,3 @@ create table tbl_reply (
 
 select *
 from tbl_reply;
-

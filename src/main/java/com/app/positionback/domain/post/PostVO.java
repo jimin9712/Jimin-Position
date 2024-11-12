@@ -12,9 +12,11 @@ public class PostVO {
     @EqualsAndHashCode.Include
     private Long id;
     private Long memberId;
+    private String memberNickname;
+
     private String postTitle;
     private String postContent;
-    private String postReadCount;
+    private int postReadCount;
     private String createdDate;
     private String updatedDate;
 
@@ -22,6 +24,7 @@ public class PostVO {
         PostDTO postDTO = new PostDTO();
         postDTO.setId(id);
         postDTO.setMemberId(memberId);
+        postDTO.setMemberNickname(memberNickname);
         postDTO.setPostTitle(postTitle);
         postDTO.setPostContent(postContent);
         postDTO.setPostReadCount(postReadCount);
