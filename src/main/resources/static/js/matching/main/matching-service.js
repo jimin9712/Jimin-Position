@@ -1,7 +1,10 @@
 const matchingService = (() => {
-    const getList = async (page, keyword, type,  callback) =>{
+    const getList = async (page, formData,  callback) =>{
         page = page || 1;
-        const response = await fetch(`/corporation/notices/all-list/${page}?keyword=${keyword}&types=${type}`);
+        const response = await fetch(`/corporation/notices/all-list/${page}`, {
+            method: "post",
+            body: formData
+        });
         const notices = await response.json();
 
         if(callback) {

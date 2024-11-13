@@ -60,7 +60,7 @@ const renderCategoryBList = (categoriesB) => {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
                 <div class="inpChk">
-                    <input type="checkbox" id="categoryB-${subRegion}">
+                    <input type="checkbox" name="locations" value="${subRegion}" id="categoryB-${subRegion}">
                     <label class="lbl" for="categoryB-${subRegion}">
                         <span class="txt">${subRegion}</span>
                     </label>

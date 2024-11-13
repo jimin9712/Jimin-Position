@@ -7,8 +7,8 @@ noticeTop4Layout.innerHTML=``;
 const showListScroll = ({notices, pagination}) =>{
     let text=``;
 
-    console.log("pagination.rowCount:", pagination.rowCount);
-    console.log("notices.length:", notices.length);
+    // console.log("pagination.rowCount:", pagination.rowCount);
+    // console.log("notices.length:", notices.length);
     // 다음 페이지 없을 때,
     if(pagination.rowCount >= notices.length){
         globalThis.loadingFlag = true;
@@ -74,24 +74,58 @@ top4Notices.notices.forEach((notice) =>{
         </li>
     `
 })
-noticeTop4Layout.innerHTML += text;
+noticeTop4Layout.innerHTML = text;
 
-// 검색 및 페이지 업데이트 기능 추가
-const renderNoticeList = (page = 1, keyword = "", type = "") => {
-    matchingService.getList(page, keyword, type, (data) => {
-        noticeLayout.innerHTML = ``; // 기존 내용 초기화
-        showListScroll(data); // 검색 결과 표시
-    });
-};
 
-// 검색 버튼 클릭 이벤트 추가
-document.getElementById("search-btn").addEventListener("click", () => {
+let formData = null;  // 전역 formData 변수
+globalThis.page = 1;
+
+// 첫 로딩 시 데이터 요청
+matchingService.getList(globalThis.page, formData, showListScroll);
+
+const searchBtn = document.getElementById("search-btn");
+// 버튼 클릭시마다 formData 새로 생성
+searchBtn.addEventListener("click", () => {
     const keyword = document.getElementById("total-ipt-keyword").value;
-    const searchType = getSelectedSearchType(); // 선택된 카테고리 타입 가져오기
-    renderNoticeList(1, keyword, searchType);
-});
+    const buttons = document.querySelectorAll(".btn-three-depth.on");
+    const locations = document.querySelectorAll("input[name='locations']:checked");
 
-const getSelectedSearchType = () => {
-    const button = document.querySelector(".btn-three-depth.on");
-    return button ? button.getAttribute("data-categorya") : ""; // 선택된 카테고리 값 반환
-};
+    // 새로 formData 생성
+    const formData = new FormData();
+    formData.append("keyword", keyword); // 검색 정보 추가
+
+    if (buttons.length > 0) {
+        buttons.forEach(button =>
+            formData.append("jobs", button.getAttribute("data-categoryc")));
+    }
+
+    // 선택된 locations만 다시 추가
+    locations.forEach((checkbox) => {
+        formData.append("locations", checkbox.value); // 여러 값 추가
+    });
+
+    // 페이지 1로 초기화
+    globalThis.page = 1;
+
+    // 검색 요청
+    matchingService.getList(globalThis.page, formData, showListScroll);
+});
+// // 검색 및 페이지 업데이트 기능 추가
+// const renderNoticeList = (page = 1, keyword = "", type = "") => {
+//     matchingService.getList(page, keyword, type, (data) => {
+//         noticeLayout.innerHTML = ``; // 기존 내용 초기화
+//         showListScroll(data); // 검색 결과 표시
+//     });
+// };
+//
+// // 검색 버튼 클릭 이벤트 추가
+// document.getElementById("search-btn").addEventListener("click", () => {
+//     const keyword = document.getElementById("total-ipt-keyword").value;
+//     const searchType = getSelectedSearchType(); // 선택된 카테고리 타입 가져오기
+//     renderNoticeList(1, keyword, searchType);
+// });
+//
+// const getSelectedSearchType = () => {
+//     const button = document.querySelector(".btn-three-depth.on");
+//     return button ? button.getAttribute("data-categorya") : ""; // 선택된 카테고리 값 반환
+// };

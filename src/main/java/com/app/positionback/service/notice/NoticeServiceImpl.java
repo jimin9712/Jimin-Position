@@ -168,6 +168,18 @@ public class NoticeServiceImpl implements NoticeService {
     public NoticeListDTO getAll(int page, Pagination pagination,Search search) {
         NoticeListDTO noticeListDTO = new NoticeListDTO();
         pagination.setPage(page);
+        // search 객체가 null이 아닌지 확인
+        if (search != null) {
+            // 검색 조건에 맞는 총 개수를 설정
+            if (search.getKeyword() != null || search.getTypes() != null) {
+                pagination.setTotal(noticeDAO.getSearchAllTotal(search));
+            } else {
+                pagination.setTotal(noticeDAO.getAllTotal());
+            }
+        } else {
+            // search가 null일 경우 전체 공고 개수로 설정
+            pagination.setTotal(noticeDAO.getAllTotal());
+        }
 
 //        pagination.setTotal(noticeDAO.getAllTotal());
         pagination.progress(12);

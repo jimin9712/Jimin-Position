@@ -163,7 +163,7 @@
             limit 3
     </select>
 
-    <sql id="search">
+    <sql id="search1">
         <if test="search.keyword != null and search.keyword != 'null'.toString()">
             <choose>
                 <when test="search.types != null">
@@ -187,6 +187,34 @@
                     )
                 </otherwise>
             </choose>
+        </if>
+    </sql>
+
+    <sql id="search">
+        <if test="search.jobs != null or search.locations != null or search.keyword != null">
+            <where>
+                <if test="search.jobs != null">
+                    notice_job_category_name in (
+                    <trim suffixOverrides=",">
+                        <foreach item="job" collection="search.jobs">
+                            #{job},
+                        </foreach>
+                    </trim>
+                    )
+                </if>
+                <if test="search.locations != null">
+                    and corporation_address in (
+                    <trim suffixOverrides=",">
+                        <foreach item="location" collection="search.locations">
+                            #{location},
+                        </foreach>
+                    </trim>
+                    )
+                </if>
+                <if test="search.keyword != null">
+                    and corporation_name like concat('%', #{search.keyword}, '%')
+                </if>
+            </where>
         </if>
     </sql>
 
