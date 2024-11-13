@@ -7,6 +7,12 @@ const matchingService = (() => {
         });
         const notices = await response.json();
 
+        // total 값 추출
+        const total = notices.pagination.total;
+
+        // total 값을 화면에 출력
+        document.getElementById("sp-preview-total-cnt").innerText = total;
+
         if(callback) {
             callback(notices);
         }

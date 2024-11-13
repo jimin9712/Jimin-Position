@@ -163,33 +163,6 @@
             limit 3
     </select>
 
-    <sql id="search1">
-        <if test="search.keyword != null and search.keyword != 'null'.toString()">
-            <choose>
-                <when test="search.types != null">
-                    <foreach item="type" collection="search.types">
-                        <if test="type == 'category-name'.toString()">
-                            and notice_job_category_name like concat('%', #{search.keyword}, '%')
-                        </if>
-                        <if test="type == 'corporation-address'.toString()">
-                            and corporation_address like concat('%', #{search.keyword}, '%')
-                        </if>
-                        <if test="type == 'corporation-name'.toString()">
-                            and corporation_name like concat('%', #{search.keyword}, '%')
-                        </if>
-                    </foreach>
-                </when>
-                <otherwise>
-                    and (
-                    notice_job_category_name like concat('%', #{search.keyword}, '%')
-                    or corporation_address like concat('%', #{search.keyword}, '%')
-                    or corporation_name like concat('%', #{search.keyword}, '%')
-                    )
-                </otherwise>
-            </choose>
-        </if>
-    </sql>
-
     <sql id="search">
         <if test="search.jobs != null or search.locations != null or search.keyword != null">
             <where>
