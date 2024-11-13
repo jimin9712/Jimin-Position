@@ -7,6 +7,8 @@ noticeTop4Layout.innerHTML=``;
 const showListScroll = ({notices, pagination}) =>{
     let text=``;
 
+    console.log("pagination.rowCount:", pagination.rowCount);
+    console.log("notices.length:", notices.length);
     // 다음 페이지 없을 때,
     if(pagination.rowCount >= notices.length){
         globalThis.loadingFlag = true;
