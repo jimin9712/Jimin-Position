@@ -7,6 +7,7 @@ import com.app.positionback.domain.notice.NoticeListDTO;
 import com.app.positionback.service.corporation.CorporationService;
 import com.app.positionback.service.notice.NoticeService;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,9 +94,9 @@ public class NoticeController {
     // 공고 전체 목록
     @GetMapping("notices/all-list/{page}")
     @ResponseBody
-    public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination) {
+    public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination, Search search) {
 
-        return noticeService.getAll(page,pagination); // corporationId에 맞게 조정
+        return noticeService.getAll(page,pagination, search); // corporationId에 맞게 조정
     }
 
     @GetMapping("notices/total")

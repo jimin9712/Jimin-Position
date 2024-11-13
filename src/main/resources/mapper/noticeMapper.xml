@@ -162,7 +162,33 @@
         order by n.created_date desc
             limit 3
     </select>
-    
+
+    <sql id="search">
+        <if test="search.keyword != null and search.keyword != 'null'.toString()">
+            <choose>
+                <when test="search.types != null">
+                    <foreach item="type" collection="search.types">
+                        <if test="type == 'category-name'.toString()">
+                            and notice_job_category_name like concat('%', #{search.keyword}, '%')
+                        </if>
+                        <if test="type == 'corporation-address'.toString()">
+                            and corporation_address like concat('%', #{search.keyword}, '%')
+                        </if>
+                        <if test="type == 'corporation-name'.toString()">
+                            and corporation_name like concat('%', #{search.keyword}, '%')
+                        </if>
+                    </foreach>
+                </when>
+                <otherwise>
+                    and (
+                    notice_job_category_name like concat('%', #{search.keyword}, '%')
+                    or corporation_address like concat('%', #{search.keyword}, '%')
+                    or corporation_name like concat('%', #{search.keyword}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
 
     <select id="selectAll" resultType="com.app.positionback.domain.notice.NoticeDTO">
         select n.id, corporation_id, notice_title, notice_career, notice_education,
@@ -172,6 +198,7 @@
                notice_job_category_name, c.corporation_name, c.corporation_address
         from tbl_notice n
         join tbl_corporation c on n.corporation_id = c.id
+        <include refid="search"/>
         order by
             n.created_date
         desc
@@ -180,6 +207,12 @@
 
     <select id="selectAllCount">
         select count(*) from tbl_notice
+    </select>
+
+    <select id="selectSearchAllCount">
+        select count(*) from tbl_notice n
+        join tbl_corporation c on n.corporation_id = c.id
+        <include refid="search"/>
     </select>
 
     <select id="selectTop3" resultType="com.app.positionback.domain.notice.NoticeDTO">

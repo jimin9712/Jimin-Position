@@ -6,6 +6,7 @@ import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeListDTO;
 import com.app.positionback.domain.notice.NoticeVO;
 import com.app.positionback.utill.Pagination;
+import com.app.positionback.utill.Search;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,7 +38,9 @@ public interface NoticeService {
     public List<NoticeDTO> getRecentNotices(Long corporationId);
 
     //공고 전체 목록 더보기
-    public NoticeListDTO getAll(int page, Pagination pagination);
+    public NoticeListDTO getAll(int page, Pagination pagination, Search search);
     // 공고 인기순 4개
     public NoticeListDTO getTop3();
+
+    public int getSearchAllTotal(Search search);
 }
