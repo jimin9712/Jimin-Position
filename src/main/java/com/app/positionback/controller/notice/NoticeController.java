@@ -2,12 +2,9 @@ package com.app.positionback.controller.notice;
 
 import com.app.positionback.domain.corporation.CorporationVO;
 import com.app.positionback.domain.file.FileDTO;
-import com.app.positionback.domain.member.MemberVO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeListDTO;
 import com.app.positionback.service.corporation.CorporationService;
-import com.app.positionback.service.file.CorporationFileService;
-import com.app.positionback.service.member.MemberService;
 import com.app.positionback.service.notice.NoticeService;
 import com.app.positionback.utill.Pagination;
 import jakarta.servlet.http.HttpSession;

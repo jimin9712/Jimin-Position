@@ -1,9 +1,5 @@
 package com.app.positionback.mapper.notice;
 
-import com.app.positionback.domain.file.FileDTO;
-import com.app.positionback.domain.file.FileVO;
-import com.app.positionback.domain.file.NoticeFileDTO;
-import com.app.positionback.domain.file.NoticeFileVO;
 import com.app.positionback.domain.notice.NoticeCategoryRankDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeMonthRankDTO;
@@ -13,7 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface NoticeMapper {
@@ -57,5 +52,5 @@ public interface NoticeMapper {
     public int selectAllCount();
 
     // 공고 목록 인기 4개
-    public List<NoticeDTO> selectTop4();
+    public List<NoticeDTO> selectTop3();
 }
