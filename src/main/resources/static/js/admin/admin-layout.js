@@ -263,6 +263,430 @@ const showCorporationList = ( { corporations, pagination } ) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// 지원현황 관리
+const ApplyListLayout = document.querySelector(".ApplyTable_container");
+const InterviewListLayout = document.querySelector(".InterviewTable_container");
+const PositionListLayout = document.querySelector(".PositionTable_container");
+const ApplyListPaging = document.querySelector(".pagination-list.applyStatus");
+const InterviewListPaging = document.querySelector(".pagination-list.interviewStatus");
+const PositionListPaging = document.querySelector(".pagination-list.positionStatus");
+const ApplyKeywordInput = document.getElementById("applySearchInput");
+const InterviewKeywordInput = document.getElementById("interviewSearchInput");
+const PositionKeywordInput = document.getElementById("positionSearchInput");
+const ApplyStatusSortOptions = document.querySelectorAll(".sort-filter-option.applySort");
+const InterviewSortOptions = document.querySelectorAll(".sort-filter-option.interviewSort");
+const PositionStatusSortOptions = document.querySelectorAll(".sort-filter-option.positionSort");
+let applySelectedSort = "최신순" // 기본 정렬 설정
+
+// 검색어 초기화
+ApplyKeywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+
+// 정렬 옵션 이벤트 설정
+ApplyStatusSortOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+        // 선택한 옵션의 data-type 속성을 가져와서 applySelectedSort에 저장
+        applySelectedSort = option.getAttribute("data-type");
+
+        // 기전 선택 해제하고 새로운 선택 항목에 selected 클래스 추가
+        ApplyStatusSortOptions.forEach((opt) => opt.classList.remove("selected"));
+        option.classList.add("selected");
+
+        // 검색어와 정렬 기준을 사용하여 지원 목록 새로고침
+        fetchAndShowApply(1);
+    });
+});
+
+// 검색어 입력 시 검색 실행
+ApplyKeywordInput.addEventListener("input", () => {
+    fetchAndShowApply(1);
+})
+
+// 페이지 이동 - fetchAndShowApply 호출
+function goToApplyPage(page) {
+    fetchAndShowApply(page);
+}
+
+// 지원 목록을 서버에서 가져오고 화면에 표시
+const fetchAndShowApply = async (page) => {
+    const keyword = ApplyKeywordInput.value;
+    const sortType = applySelectedSort;
+
+    try {
+        // 데이터를 서버에서 가져오는 요청
+        const response = await fetch(`/admin/position/position/apply/${page}?keyword=${keyword}&types=${sortType}`);
+        const data = await response.json();
+
+        // 페이지 데이터와 지원 목록 데이터를 표시하는 함수 호출
+        data.pagination.currentPage = page;
+        showApplyList(data);
+    } catch (error) {
+        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
+    }
+};
+
+// 일반 회원 목록과 페이지네이션을 표시하는 함수
+const showApplyList = ({applys, pagination}) => {
+    let text = `
+        <div class="ApplyTable_row ApplyTable_header">
+            <div class="ApplyTable_cell"><input type="checkbox" id="selectAll"></div>
+            <div class="ApplyTable_cell">기업명</div>
+            <div class="ApplyTable_cell">신청일</div>
+            <div class="ApplyTable_cell">공고 제목</div>
+            <div class="ApplyTable_cell">신청자</div>
+            <div class="ApplyTable_cell">전화번호</div>
+            <div class="ApplyTable_cell">지원 분야</div>
+            <div class="ApplyTable_cell">상태</div>
+            <div class="ApplyTable_cell">Action</div>
+        </div>
+    `;
+
+    applys.forEach((apply) => {
+        text += `
+        <div class="ApplyTable_row"
+            <div class="ApplyTable_cell"><input type="checkbox" id="selectAll"></div>
+            <div class="ApplyTable_cell">${apply.corporationName}</div>
+            <div class="ApplyTable_cell">${apply.createdDate}</div>
+            <div class="ApplyTable_cell">${apply.noticeTitle}</div>
+            <div class="ApplyTable_cell">${apply.memberName}</div>
+            <div class="ApplyTable_cell">${apply.memberPhone}</div>
+            <div class="ApplyTable_cell">${apply.applyType}</div>
+            <div class="ApplyTable_cell">${apply.applyStatus}</div>
+            <div class="ApplyTable_cell"><button class="editBtn">환불하기</button></div>
+        </div>
+        `;
+    });
+
+    ApplyListLayout.innerHTML = text;
+
+    let pagingText = '';
+
+    // 처음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-first ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-first-link" onclick="goToApplyPage(1)" rel="nofollow">
+                <span class="pagination-first-icon" aria-hidden="true">«</span>
+            </a>
+        </li>
+    `;
+
+    // 이전 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-prev ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-prev-link" onclick="goToApplyPage(${pagination.currentPage - 1})" rel="prev nofollow">
+                <span class="pagination-prev-icon" aria-hidden="true">‹</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지 번호 버튼
+    for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        pagingText += `
+            <li class="pagination-page ${i === pagination.currentPage ? 'active' : ''}">
+                <a href="#" class="pagination-page-link" onclick="goToApplyPage(${i})">${i}</a>
+            </li>
+        `;
+    }
+
+    // 다음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-next ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-next-link" onclick="goToApplyPage(${pagination.currentPage + 1})" rel="next nofollow">
+                <span class="pagination-next-icon" aria-hidden="true">›</span>
+            </a>
+        </li>
+    `;
+
+    // 마지막 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-last ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-last-link" onclick="goToApplyPage(${pagination.realEnd})" rel="nofollow">
+                <span class="pagination-last-icon" aria-hidden="true">»</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지네이션을 동적으로 추가
+    ApplyListPaging.innerHTML = pagingText;
+};
+
+// 면접 현황 기본 정렬 설정
+let interviewSelectedSort = "최신순";
+
+// 정렬 옵션 이벤트 설정
+InterviewSortOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+        // 선택한 옵션의 data-type 속성을 가져와서 interviewSelectedSort에 저장
+        interviewSelectedSort = option.getAttribute("data-type");
+
+        // 기존 선택 해제하고 새로운 선택 항목에 selected 클래스 추가
+        InterviewSortOptions.forEach((opt) => opt.classList.remove("selected"));
+        option.classList.add("selected");
+
+        // 검색어와 정렬 기준을 사용하여 면접 현황 목록 새로고침
+        fetchAndShowInterview(1);
+    })
+})
+
+// 검색어 초기화
+InterviewKeywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+
+// 검색어 입력시 검색 실행
+InterviewKeywordInput.addEventListener("input", () => {
+    fetchAndShowInterview(1);
+});
+
+// 페이지 이동 - feychAndShowInterview 호출
+function goToInterviewPage(page) {
+    fetchAndShowInterview(page);
+}
+
+// 면접 현황 목록을 서버에서 가져오고 화면에 표시
+const fetchAndShowInterview = async (page) => {
+    const keyword = InterviewKeywordInput.value;
+    try {
+        // 데이터를 서버에서 가져오는 요청
+        const response = await fetch(`/admin/position/apply/${page}?keyword=${keyword}`);
+        const data = await response.json();
+
+        // 페이지 데이터와 면접 현황 목록 데이터를 표시하는 함수 호출
+        data.pagination.currentPage = page;
+        showInterviewList(data);
+    } catch (error) {
+        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
+    }
+};
+
+// 면접 현황 목록과 페이지 처리를 표시
+const showInterviewList = ({Interviews, pagination}) => {
+    let text = `
+        <div class="InterviewTable_row InterviewTable_header">
+            <div class="InterviewTable_cell"><input type="checkbox" id="selectAll"></div>
+            <div class="InterviewTable_cell">기업명</div>
+            <div class="InterviewTable_cell">면접 날짜</div>
+            <div class="InterviewTable_cell">공고 제목</div>
+            <div class="InterviewTable_cell">면접자</div>
+            <div class="InterviewTable_cell">전화번호</div>
+            <div class="InterviewTable_cell">지원 분야</div>
+            <div class="InterviewTable_cell">상태</div>
+            <div class="InterviewTable_cell">Action</div>
+        </div>
+    `;
+
+    interviews.forEach((interview) => {
+        text += `
+            <div class="InterviewTable_row">
+                <div class="InterviewTable_cell"><input type="checkbox" id="selectAll"></div>
+                <div class="InterviewTable_cell">${interview.corporationName}</div>
+                <div class="InterviewTable_cell">${interview.interviewDate}</div>
+                <div class="InterviewTable_cell">${interview.noticeTitle}</div>
+                <div class="InterviewTable_cell">${interview.memberName}</div>
+                <div class="InterviewTable_cell">${interview.memberPhone}</div>
+                <div class="InterviewTable_cell">${interview.applyType}</div>
+                <div class="InterviewTable_cell">${interview.interviewStatus}</div>
+                <div class="InterviewTable_cell">수정</div>
+        `;
+    });
+
+    InterviewListLayout.innerHTML = text;
+
+    let pagingText = '';
+
+    // 처음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-first ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-first-link" onclick="goToInterviewPage(1)" rel="nofollow">
+                <span class="pagination-first-icon" aria-hidden="true">«</span>
+            </a>
+        </li>
+    `;
+
+    // 이전 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-prev ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-prev-link" onclick="goToInterviewPage(${pagination.currentPage - 1})" rel="prev nofollow">
+                <span class="pagination-prev-icon" aria-hidden="true">‹</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지 번호 버튼
+    for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        pagingText += `
+            <li class="pagination-page ${i === pagination.currentPage ? 'active' : ''}">
+                <a href="#" class="pagination-page-link" onclick="goToInterviewPage(${i})">${i}</a>
+            </li>
+        `;
+    }
+
+    // 다음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-next ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-next-link" onclick="goToInterviewPage(${pagination.currentPage + 1})" rel="next nofollow">
+                <span class="pagination-next-icon" aria-hidden="true">›</span>
+            </a>
+        </li>
+    `;
+
+    // 마지막 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-last ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-last-link" onclick="goToInterviewPage(${pagination.realEnd})" rel="nofollow">
+                <span class="pagination-last-icon" aria-hidden="true">»</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지네이션을 동적으로 추가
+    InterviewListPaging.innerHTML = pagingText;
+
+};
+
+// 포지션 현황 기본 정렬 설정
+let positionSelectedSort = "최신순";
+
+// 포지션 현황 정렬 옵션 이벤트 설정
+PositionStatusSortOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+        // 선택한 옵션의 data-type 속성을 가져와서 positionSelectedSort에 저장
+        positionSelectedSort = option.getAttribute("data-type");
+
+        // 기존 선택 해제하고 새로운 선택 항목에 selected 클래스 추가
+        PositionStatusSortOptions.forEach((opt) => opt.classList.remove("selected"));
+        option.classList.add("selected");
+
+        // 검색어와 정렬 기준을 사용하여 포지션 현황 목록 새로고침
+        fetchAndShowPosition(1);
+    });
+});
+
+// 검색어 초기화
+PositionKeywordInput.value = new URLSearchParams(window.location.search).get("keyword") || "";
+
+// 검색어 입력시 검색 실행
+PositionKeywordInput.addEventListener("input", () => {
+    fetchAndShowPosition(1);
+});
+
+// 페이지 이동 - fetchAndShowPosition 호출
+function goToPositionPage(Page) {
+    fetchAndShowPosition(page);
+}
+
+// 포지션 현황 목록을 서버에서 가져오고 화면에 표시
+const fetchAndShowPosition = async (page) => {
+    const keyword = PositionKeywordInput.value;
+    const sortType = positionSelectedSort;
+
+    try {
+        // 데이터를 서버에서 가져오는 요청
+        const response = await fetch(`/admin/position/position/${page}?keyword=${keyword}&types=${sortType}`);
+        const data = await response.json();
+
+        // 페이지 데이터와 일반 회원 데이터를 표시하는 함수 호출
+        data.pagination.currentPage = page;
+        showPositionList(data);
+    } catch (error) {
+        console.error(`페이지 ${page} 로딩 중 오류 발생:`, error);
+    }
+};
+
+// 포지션 현황 목록과 페이지네이션을 표시
+const showPositionList = ({positions, pagination}) => {
+    let text = `
+        <div class="PositionTable_row PositionTable_header">
+            <div class="PositionTable_cell"><input type="checkbox" id="selectAll"></div>
+            <div class="PositionTable_cell">기업명</div>
+            <div class="PositionTable_cell">포지션 근무일</div>
+            <div class="PositionTable_cell">공고 제목</div>
+            <div class="PositionTable_cell">면접자</div>
+            <div class="PositionTable_cell">전화번호</div>
+            <div class="PositionTable_cell">지원 분야</div>
+            <div class="PositionTable_cell">상태</div>
+            <div class="PositionTable_cell">Action</div>
+        </div>
+    `;
+
+    positions.forEach((position) => {
+        text += `
+            <div class="PositionTable_row">
+                <div class="PositionTable_cell"><input type="checkbox" id="selectAll"></div>
+                <div class="PositionTable_cell">${position.corporationName}</div>
+                <div class="PositionTable_cell">${position.noticeWorkStartDate}</div>
+                <div class="PositionTable_cell">${position.noticeTitle}</div>
+                <div class="PositionTable_cell">${position.memberName}</div>
+                <div class="PositionTable_cell">${position.memberPhone}</div>
+                <div class="PositionTable_cell">${position.applyType}</div>
+                <div class="PositionTable_cell">${position.positionStatus}</div>
+                <div class="PositionTable_cell">수정</div>
+            </div>
+        `;
+    });
+
+    PositionListLayout.innerHTML = text;
+
+    let pagingText = '';
+
+    // 처음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-first ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-first-link" onclick="goToPositionPage(1)" rel="nofollow">
+                <span class="pagination-first-icon" aria-hidden="true">«</span>
+            </a>
+        </li>
+    `;
+
+    // 이전 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-prev ${pagination.currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="pagination-prev-link" onclick="goToPositionPage(${pagination.currentPage - 1})" rel="prev nofollow">
+                <span class="pagination-prev-icon" aria-hidden="true">‹</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지 번호 버튼
+    for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        pagingText += `
+            <li class="pagination-page ${i === pagination.currentPage ? 'active' : ''}">
+                <a href="#" class="pagination-page-link" onclick="goToPositionPage(${i})">${i}</a>
+            </li>
+        `;
+    }
+
+    // 다음 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-next ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-next-link" onclick="goToPositionPage(${pagination.currentPage + 1})" rel="next nofollow">
+                <span class="pagination-next-icon" aria-hidden="true">›</span>
+            </a>
+        </li>
+    `;
+
+    // 마지막 페이지로 이동하는 버튼
+    pagingText += `
+        <li class="pagination-last ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}">
+            <a href="#" class="pagination-last-link" onclick="goToPositionPage(${pagination.realEnd})" rel="nofollow">
+                <span class="pagination-last-icon" aria-hidden="true">»</span>
+            </a>
+        </li>
+    `;
+
+    // 페이지네이션을 동적으로 추가
+    PositionListPaging.innerHTML = pagingText;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

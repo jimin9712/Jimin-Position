@@ -102,7 +102,7 @@ const applyService = (() => {
         }
     };
 
-    // 인턴십 현황 데이터를 서버에서 가져오는 비동기 함수
+    // 포지션 현황 데이터를 서버에서 가져오는 비동기 함수
     const fetchPosition = async (page, keyword = "", sortType = "", callback) => {
         try {
             page = page || 1;
@@ -129,110 +129,7 @@ const applyService = (() => {
     return { fetchApply: fetchApply, fetchInterview: fetchInterview, fetchPosition: fetchPosition };
 })();
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 지원 현황 데이터를 표시하는 함수
-const displayApplys = (applys) => {
-    // 지원 현황이 표시될 컨테이너 선택
-    const applyListDiv = document.querySelector('#apply-section .ApplyTable_container');
-
-    // 기존 데이터 제거 (헤더 행 제외)
-    const existingRows = applyListDiv.querySelectorAll('.ApplyTable_row:not(.ApplyTable_header)');
-    existingRows.forEach(row => row.remove());
-
-    // `applys` 배열 내의 각 지원 데이터를 반복하여 새 행 생성
-    applys.forEach(apply => {
-        const applyRow = document.createElement('div');
-        applyRow.classList.add('ApplyTable_row');
-
-        // 각 지원 데이터 (기업명, 신청일, 공고 제목, 신청자, 전화번호, 지원 분야, 상태)를 포함하는 HTML 작성
-        applyRow.innerHTML = `
-            <div class="ApplyTable_cell"><input type="checkbox" class="ApplyCheckbox" /></div>
-            <div class="ApplyTable_cell">${apply.corporationName || ''}</div>
-            <div class="ApplyTable_cell">${apply.applicationDate || ''}</div>
-            <div class="ApplyTable_cell">${apply.noticeTitle || ''}</div>
-            <div class="ApplyTable_cell">${apply.applicantName || ''}</div>
-            <div class="ApplyTable_cell">${apply.applicantPhone || ''}</div>
-            <div class="ApplyTable_cell">${apply.applyType || ''}</div>
-            <div class="ApplyTable_cell">${apply.applyStatus || ''}</div>
-            <div class="ApplyTable_cell"><button class="editBtn">환불하기</button></div>
-        `;
-
-        // 새로 생성한 지원 행을 컨테이너에 추가
-        applyListDiv.appendChild(applyRow);
-    });
-};
-
-// 면접 현황 데이터를 표시하는 함수
-const displayInterviews = (interviews) => {
-    // 면접 현황이 표시될 컨테이너 선택
-    const interviewListDiv = document.querySelector('#Interview-section .ApplyTable_container');
-
-    // 기존 데이터 제거 (헤더 행 제외)
-    const existingRows = interviewListDiv.querySelectorAll('.ApplyTable_row:not(.ApplyTable_header)');
-    existingRows.forEach(row => row.remove());
-
-    // `interviews` 배열 내의 각 면접 데이터를 반복하여 새 행 생성
-    interviews.forEach(interview => {
-        const interviewRow = document.createElement('div');
-        interviewRow.classList.add('ApplyTable_row');
-
-        // 각 면접 데이터 (기업명, 면접일, 공고 제목, 면접자, 전화번호, 면접 상태)를 포함하는 HTML 작성
-        interviewRow.innerHTML = `
-            <div class="ApplyTable_cell"><input type="checkbox" class="ApplyCheckbox" /></div>
-            <div class="ApplyTable_cell">${interview.corporationName || ''}</div>
-            <div class="ApplyTable_cell">${interview.interviewDate || ''}</div>
-            <div class="ApplyTable_cell">${interview.noticeTitle || ''}</div>
-            <div class="ApplyTable_cell">${interview.intervieweeName || ''}</div>
-            <div class="ApplyTable_cell">${interview.intervieweePhone || ''}</div>
-            <div class="ApplyTable_cell">${interview.intervieweeType || ''}</div>
-            <div class="ApplyTable_cell">${interview.interviewStatus || ''}</div>
-            <div class="ApplyTable_cell"><button class="editBtn">수정</button></div>
-        `;
-
-        // 새로 생성한 면접 행을 컨테이너에 추가
-        interviewListDiv.appendChild(interviewRow);
-    });
-};
-
-// 인턴십 현황 데이터를 표시하는 함수
-const displayPositions = (positions) => {
-    // 인턴십 현황이 표시될 컨테이너 선택
-    const positionListDiv = document.querySelector('#Position-section .ApplyTable_container');
-
-    // 기존 데이터 제거 (헤더 행 제외)
-    const existingRows = positionListDiv.querySelectorAll('.ApplyTable_row:not(.ApplyTable_header)');
-    existingRows.forEach(row => row.remove());
-
-    // `positions` 배열 내의 각 인턴십 데이터를 반복하여 새 행 생성
-    positions.forEach(position => {
-        const positionRow = document.createElement('div');
-        positionRow.classList.add('ApplyTable_row');
-
-        // 각 인턴십 데이터 (기업명, 인턴십 시작일, 공고 제목, 인턴 이름, 전화번호, 인턴십 상태)를 포함하는 HTML 작성
-        positionRow.innerHTML = `
-            <div class="ApplyTable_cell"><input type="checkbox" class="ApplyCheckbox" /></div>
-            <div class="ApplyTable_cell">${position.corporationName || ''}</div>
-            <div class="ApplyTable_cell">${position.startDate || ''}</div>
-            <div class="ApplyTable_cell">${position.noticeTitle || ''}</div>
-            <div class="ApplyTable_cell">${position.internName || ''}</div>
-            <div class="ApplyTable_cell">${position.internPhone || ''}</div>
-            <div class="ApplyTable_cell">${position.internType || ''}</div>
-            <div class="ApplyTable_cell">${position.positionStatus || ''}</div>
-            <div class="ApplyTable_cell"><button class="editBtn">수정</button></div>
-        `;
-
-        // 새로 생성한 인턴십 행을 컨테이너에 추가
-        positionListDiv.appendChild(positionRow);
-    });
-};
-
-applyService.fetchApply(displayApplys);
-applyService.fetchInterview(displayInterviews);
-applyService.fetchPosition(displayPositions);
-
-
-// // // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 결제 관리
 // 지원료 결제

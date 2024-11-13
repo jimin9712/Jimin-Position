@@ -1005,22 +1005,11 @@
                                 <div class="CommonLayout_container">
                                     <div class="filter_wrap">
                                         <div class="SortFilterOptions">
-                                            <span
-                                                class="sort-filter-option selected"
-                                                >최신순</span
-                                            >
-                                            <span class="sort-filter-option"
-                                                >지원 완료</span
-                                            >
-                                            <span class="sort-filter-option"
-                                                >지원 취소</span
-                                            >
-                                            <span class="sort-filter-option"
-                                                >지원 합격</span
-                                            >
-                                            <span class="sort-filter-option"
-                                                >지원 불합격</span
-                                            >
+                                            <span class="sort-filter-option applySort selected" data-type="recent">신청일순</span>
+                                            <span class="sort-filter-option applySort" data-type="applycomplete">지원 완료</span>
+                                            <span class="sort-filter-option applySort" data-type="applycancel">지원 취소</span>
+                                            <span class="sort-filter-option applySort" data-type="applypass">지원 합격</span>
+                                            <span class="sort-filter-option applySort" data-type="applyfail">지원 불합격</span>
                                         </div>
                                         <!-- Action Buttons -->
                                         <div class="action-buttons">
@@ -1332,19 +1321,19 @@
                                     <div class="filter_wrap">
                                         <div class="SortFilterOptions">
                                             <span
-                                                class="sort-filter-option selected"
-                                                >최신순</span
+                                                class="sort-filter-option interviewSort selected" data-type="recent"
+                                                >면접 날짜순</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option interviewSort" data-type="interviewexpected"
                                                 >면접 예정</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option interviewSort" data-type="interviewcancel"
                                                 >면접 취소</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option interviewSort" data-type="interviewpass"
                                                 >면접 합격</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option interviewSort" data-type="interviewfail"
                                                 >면접 불합격</span
                                             >
                                         </div>
@@ -1391,7 +1380,7 @@
                                             <div
                                                 class="InterviewTable_cell Interview-headerCell"
                                             >
-                                                지원 합격일
+                                                면접 날짜
                                             </div>
                                             <div
                                                 class="InterviewTable_cell Interview-headerCell"
@@ -1658,16 +1647,16 @@
                                     <div class="filter_wrap">
                                         <div class="SortFilterOptions">
                                             <span
-                                                class="sort-filter-option selected"
-                                                >최신순</span
+                                                class="sort-filter-option positionSort selected" data-type="recent"
+                                                >포지션 근무일순</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option positionSort" data-type="positionschedule"
                                                 >포지션 예정</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option positionSort" data-type="positioncompletion"
                                                 >포지션 수료</span
                                             >
-                                            <span class="sort-filter-option"
+                                            <span class="sort-filter-option positionSort" data-type="positionnotcompleted"
                                                 >포지션 미수료</span
                                             >
                                         </div>
@@ -1725,7 +1714,7 @@
                                             <div
                                                 class="PositionTable_cell Position-headerCell"
                                             >
-                                                면접자
+                                                근무자
                                             </div>
                                             <div
                                                 class="PositionTable_cell Position-headerCell"

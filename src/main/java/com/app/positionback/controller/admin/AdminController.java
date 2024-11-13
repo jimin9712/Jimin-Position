@@ -100,7 +100,7 @@ public class AdminController {
     }
 
     // 면접 현황
-    @GetMapping("/position/interview")
+    @GetMapping("/position/interview/{page}")
     @ResponseBody
     public InterviewListDTO getInterviews(@PathVariable("page") Integer page, Pagination pagination, Search search) {
         if (search.getTypes() == null || search.getTypes().length == 0) {
@@ -116,7 +116,7 @@ public class AdminController {
     }
 
     // 포지션 현황
-    @GetMapping("/position/position")
+    @GetMapping("/position/position/{page}")
     @ResponseBody
     public PositionListDTO getPositions(@PathVariable("page") Integer page, Pagination pagination, Search search) {
         if (search.getTypes() == null || search.getTypes().length == 0) {
