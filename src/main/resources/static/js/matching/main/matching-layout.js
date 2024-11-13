@@ -91,7 +91,7 @@ searchBtn.addEventListener("click", () => {
     const locations = document.querySelectorAll("input[name='locations']:checked");
 
     // 새로 formData 생성
-    const formData = new FormData();
+    formData = new FormData();
     formData.append("keyword", keyword); // 검색 정보 추가
 
     if (buttons.length > 0) {
@@ -106,6 +106,9 @@ searchBtn.addEventListener("click", () => {
 
     // 페이지 1로 초기화
     globalThis.page = 1;
+
+    // 기존 목록 초기화
+    noticeLayout.innerHTML = ``;
 
     // 검색 요청
     matchingService.getList(globalThis.page, formData, showListScroll);

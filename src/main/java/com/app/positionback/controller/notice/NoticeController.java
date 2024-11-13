@@ -95,7 +95,7 @@ public class NoticeController {
     // 공고 전체 목록
     @PostMapping("notices/all-list/{page}")
     @ResponseBody
-    public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination, @RequestBody Search search) {
+    public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination, Search search) {
         log.info("검색어: " + search.getKeyword());
 
         // getJobs()가 null이 아닌지 확인하고 로그 출력

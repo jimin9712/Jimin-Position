@@ -1,8 +1,8 @@
 
 globalThis.loadingFlag = false;
 window.addEventListener("scroll", (e) => {
-    console.log(window.innerHeight + window.scrollY)
-    console.log(document.body.offsetHeight)
+    // console.log(window.innerHeight + window.scrollY)
+    // console.log(document.body.offsetHeight)
     // console.log(loadingFlag);
     if(loadingFlag){
         globalThis.loadingFlag = false;

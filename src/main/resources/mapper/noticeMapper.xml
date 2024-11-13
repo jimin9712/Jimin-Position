@@ -203,10 +203,10 @@
                     )
                 </if>
                 <if test="search.locations != null">
-                    and corporation_address in (
-                    <trim suffixOverrides=",">
+                    and (
+                    <trim suffixOverrides="or">
                         <foreach item="location" collection="search.locations">
-                            #{location},
+                            corporation_address like concat('%', #{location}, '%') or
                         </foreach>
                     </trim>
                     )
