@@ -1,4 +1,4 @@
-package com.app.positionback.domain.apply;
+package com.app.positionback.domain.interview;
 
 import com.app.positionback.utill.Pagination;
 import com.app.positionback.utill.Search;
@@ -11,8 +11,8 @@ import java.util.List;
 
 @Component
 @Getter @Setter @ToString
-public class ApplyListDTO {
-    private List<ApplyDTO> applies;
+public class InterviewListDTO {
+    private List<InterviewDTO> interviews;
     private Pagination pagination;
     private Search search;
 }
