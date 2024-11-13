@@ -75,3 +75,23 @@ top4Notices.notices.forEach((notice) =>{
     `
 })
 noticeTop4Layout.innerHTML += text;
+
+// 검색 및 페이지 업데이트 기능 추가
+const renderNoticeList = (page = 1, keyword = "", type = "") => {
+    matchingService.getList(page, keyword, type, (data) => {
+        noticeLayout.innerHTML = ``; // 기존 내용 초기화
+        showListScroll(data); // 검색 결과 표시
+    });
+};
+
+// 검색 버튼 클릭 이벤트 추가
+document.getElementById("search-btn").addEventListener("click", () => {
+    const keyword = document.getElementById("total-ipt-keyword").value;
+    const searchType = getSelectedSearchType(); // 선택된 카테고리 타입 가져오기
+    renderNoticeList(1, keyword, searchType);
+});
+
+const getSelectedSearchType = () => {
+    const button = document.querySelector(".btn-three-depth.on");
+    return button ? button.getAttribute("data-categorya") : ""; // 선택된 카테고리 값 반환
+};
