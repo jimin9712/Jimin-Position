@@ -1,165 +1,192 @@
-// 서버에서 받아올 게시글 데이터 예시 (나중에 실제 서버에서 데이터 받기)
-const posts = [
-    {
-        id: 1,
-        title: "만29세 경력 없는 신입..",
-        desc: "지방 4년제 나오고 학점은 3~3.5사이, 토목전공에 토목기사자격증 하나 있습니다...",
-        replyCount: 15,
-        viewCount: 4657,
-        author: "2ak6eeJme3dIVKy",
-        date: "4일 전",
-        isHot: true,
-    },
-    {
-        id: 2,
-        title: "퇴사사유... 어떻게 설명해야 할까요",
-        desc: "의료직군인데 전 직장에서 환자에게 폭행당했습니다...",
-        replyCount: 23,
-        viewCount: 23,
-        author: "mKjR0eteUizH8wZ",
-        date: "오늘",
-        isHot: false,
-    },
-    // 추가 게시글들...
-];
+document.addEventListener("DOMContentLoaded", function() {
+    // 페이지 로딩 시 기본적으로 최신순으로 게시글을 불러옴
+    fetchPosts(1, '', '최신순');  // 기본적으로 "최신순" 필터를 사용하여 페이지 로드
+
+    // 체크박스에 이벤트 리스너 추가 (한 번에 하나만 선택)
+    const checkboxes = document.querySelectorAll(".btn-sort");
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", function() {
+            // 다른 체크박스를 모두 해제
+            checkboxes.forEach((cb) => {
+                if (cb !== checkbox) {
+                    cb.checked = false;
+                }
+            });
+            // 선택된 필터를 기준으로 게시글을 새로 고침
+            let selectedFilter = getSelectedFilters();
+            fetchPosts(1, '', selectedFilter); // 페이지 1로 요청, 검색어와 필터를 함께 전달
+        });
+    });
+
+    // 검색 버튼 클릭 이벤트 처리
+    document.getElementById('search-button').addEventListener('click', function() {
+        const searchQuery = document.getElementById('input-keyword').value.trim();
+        if (searchQuery === "") {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+        let selectedFilter = getSelectedFilters(); // 선택된 필터값을 가져옴
+        fetchPosts(1, searchQuery, selectedFilter);  // 페이지 1로 요청, 검색어와 필터 전달
+    });
+});
+
+// 체크박스에서 선택된 필터 값을 하나만 반환하는 함수
+function getSelectedFilters() {
+    let selectedFilter = '최신순';  // 기본적으로 최신순으로 설정
+    const checkboxes = document.querySelectorAll(".btn-sort");
+
+    checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+            selectedFilter = checkbox.value; // 체크된 값 하나만 반환
+        }
+    });
+
+    return selectedFilter;  // 필터가 없으면 기본값 '최신순'이 반환됨
+}
 
 // 게시글을 렌더링하는 함수
-function renderPosts(posts) {
+function renderPosts(data) {
+    const posts = data.posts;
+    const pagination = data.pagination;
+    // totalCount가 null일 경우 pagination.total을 사용
+    const totalCount = data.total !== null && data.total !== undefined ? data.total : (pagination && pagination.total ? pagination.total : 0);
     const postList = document.getElementById("qst-and-ans-list");
+    postList.innerHTML = ""; // 기존 항목 초기화하여 중복 추가 방지
 
-    posts.forEach((post) => {
-        const listItem = document.createElement("li");
+    // totalCount가 존재하는 경우에만 표시
+    if (totalCount !== null && totalCount !== undefined) {
+        const listNumTitle = document.querySelector(".list-num-tit strong");
+        listNumTitle.textContent = totalCount.toLocaleString();
+    }
 
-        // 'HOT' 태그 처리
-        const hotLabel = post.isHot ? `<em class="label hot">HOT</em>` : "";
+    if (!posts || posts.length === 0) {
+        const noPostsMessage = document.createElement('li');
+        noPostsMessage.innerText = "게시글이 없습니다.";
+        postList.appendChild(noPostsMessage);
+    } else {
+        posts.forEach((post) => {
+            const listItem = document.createElement("li");
 
-        listItem.innerHTML = `
-            <div class="qna-subject-wrap">
-                ${hotLabel}
-                <span class="qna-subject">${post.title}</span>
-            </div>
-            <span class="qna-desc">${post.desc}</span>
-            <div class="qna-data-infos">
-                <span class="qna-info qna-reply">댓글 <strong>${post.replyCount}</strong></span>
-                <span class="qna-info qna-view">조회 <strong>${post.viewCount}</strong></span>
-                <div class="qna-member-info">
-                    <span class="qna-from">${post.author}님이 ${post.date}</span>
-                   
+            // createdDate가 null인 경우 처리
+            let formattedDate = "날짜 정보 없음";
+            if (post.createdDate) {
+                const date = new Date(post.createdDate);
+                if (!isNaN(date)) {
+                    formattedDate = date.toLocaleDateString();
+                }
+            }
+
+            listItem.innerHTML = `
+                <div class="qna-subject-wrap">
+                    <span class="qna-subject">${escapeHtml(post.postTitle)}</span>
                 </div>
-            </div>
-            <a href="" class="go">자세히 보기</a>
-        `;
+                <span class="qna-desc">${escapeHtml(post.postContent)}</span>
+                <div class="qna-data-infos">
+                    <span class="qna-info qna-reply">댓글 <strong>${post.postReplyCount || 0}</strong></span>
+                    <span class="qna-info qna-view">조회 <strong>${post.postReadCount || 0}</strong></span>
+                    <div class="qna-member-info">
+                        <span class="qna-from">${post.memberNickname || '알 수 없음'} ${formattedDate}</span>
+                    </div>
+                </div>
+            `;
 
-        postList.appendChild(listItem);
-    });
-}
+            listItem.addEventListener("click", () => {
+                window.location.href = `/community/community-details/${post.id}`;
+            });
 
-// 페이지 로드 시 게시글 렌더링
-document.addEventListener("DOMContentLoaded", function () {
-    renderPosts(posts); // 서버에서 받아온 데이터를 렌더링
-});
-
-// ================================================================================
-const listCategory = document.querySelector(".list-category");
-const prevButton = document.querySelector(".bx-prev");
-const nextButton = document.querySelector(".bx-next");
-
-// 슬라이드 목록의 너비를 가져옴
-const listItems = document.querySelectorAll(".list-category li");
-const totalItems = listItems.length;
-const itemWidth = listItems[0].offsetWidth; // 각 슬라이드 항목의 너비
-const marginRight = parseInt(window.getComputedStyle(listItems[0]).marginRight); // 마진값
-const visibleItemsCount = Math.floor(
-    listCategory.parentElement.offsetWidth / (itemWidth + marginRight)
-); // 한 화면에 보이는 슬라이드 항목 수
-const totalWidth = (itemWidth + marginRight) * totalItems; // 전체 슬라이드의 너비
-let currentPosition = 0; // 현재 위치
-const moveDistance = (itemWidth + marginRight) * Math.floor(totalItems / 4); // 슬라이드가 1/4만큼 이동
-
-listCategory.style.width = totalWidth + "px";
-
-// 이전 버튼 클릭 이벤트
-prevButton.addEventListener("click", function () {
-    if (currentPosition === 0) {
-        return;
-    }
-    currentPosition += moveDistance;
-    if (currentPosition > 0) {
-        currentPosition = 0; // 처음으로 돌아가지 않도록 설정
-    }
-    listCategory.style.transition = "transform 0.5s ease";
-    listCategory.style.transform = "translateX(" + currentPosition + "px)";
-
-    // 버튼 활성화/비활성화 상태 업데이트
-    updateButtonState();
-});
-
-// 다음 버튼 클릭 이벤트
-nextButton.addEventListener("click", function () {
-    if (
-        currentPosition <=
-        -totalWidth + (itemWidth + marginRight) * visibleItemsCount
-    ) {
-        return; // 마지막 슬라이드를 넘지 않도록 설정
-    }
-    currentPosition -= moveDistance;
-    if (
-        currentPosition <=
-        -totalWidth + (itemWidth + marginRight) * visibleItemsCount
-    ) {
-        currentPosition =
-            -totalWidth + (itemWidth + marginRight) * visibleItemsCount; // 마지막 슬라이드로 이동하고 더 이상 넘어가지 않도록 설정
-    }
-    listCategory.style.transition = "transform 0.5s ease";
-    listCategory.style.transform = "translateX(" + currentPosition + "px)";
-
-    // 버튼 활성화/비활성화 상태 업데이트
-    updateButtonState();
-});
-
-// 버튼 활성화/비활성화 상태를 업데이트하는 함수
-function updateButtonState() {
-    if (currentPosition === 0) {
-        prevButton.classList.add("disabled");
-    } else {
-        prevButton.classList.remove("disabled");
+            postList.appendChild(listItem);
+        });
     }
 
-    if (
-        currentPosition <=
-        -totalWidth + (itemWidth + marginRight) * visibleItemsCount
-    ) {
-        nextButton.classList.add("disabled");
-    } else {
-        nextButton.classList.remove("disabled");
+    if (pagination) {
+        renderPagination(pagination, totalCount); // 페이지네이션 생성
     }
 }
 
-// 초기 버튼 상태 업데이트
-updateButtonState();
-
-// =================================================================================
-const checkboxes = document.querySelectorAll(".btn-sort");
-
-checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("click", function () {
-        // 모든 체크박스의 'on' 클래스 제거 및 체크 해제
-        checkboxes.forEach((cb) => {
-            cb.checked = false;
-            cb.classList.remove("on");
-        });
-
-        // 현재 클릭된 체크박스만 체크하고 'on' 클래스 추가
-        checkbox.checked = true;
-        checkbox.classList.add("on");
+// HTML 이스케이프 함수 (보안 강화)
+function escapeHtml(text) {
+    if (typeof text !== 'string') return text;
+    return text.replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        })[s];
     });
-});
+}
 
-document
-    .querySelectorAll(".btn-qna-bookmark.repute-scrap")
-    .forEach((button) => {
-        button.addEventListener("click", function () {
-            // 'on' 클래스 토글
-            this.classList.toggle("on");
+// 페이지네이션 렌더링 함수
+function renderPagination(pagination, total) {
+    const paginationElement = document.getElementById("page-box");
+    paginationElement.innerHTML = ""; // 기존 페이지네이션 초기화
+
+    // `realEnd` 값 계산 (페이지네이션 끝값 계산)
+    const realEnd = Math.ceil((total || 1) / pagination.rowCount);
+
+    // 이전 버튼
+    if (pagination.prev) {
+        const prevButton = document.createElement("a");
+        prevButton.textContent = "이전";
+        prevButton.href = `#`;
+        prevButton.classList.add("btn-type", "size-s");
+        prevButton.onclick = (event) => {
+            event.preventDefault();
+            fetchPosts(pagination.page - 1);
+        };
+        paginationElement.appendChild(prevButton);
+    }
+
+    // 필요한 페이지 버튼만 렌더링 (페이지 수가 많으면 페이지 버튼을 제한)
+    for (let i = pagination.startPage; i <= realEnd && i <= pagination.endPage; i++) {
+        const pageButton = document.createElement("a");
+        pageButton.classList.add("btn-type", "size-s");
+        pageButton.textContent = i;
+        if (i === pagination.page) {
+            pageButton.classList.add("active");
+        }
+        pageButton.onclick = (event) => {
+            event.preventDefault();
+            fetchPosts(i);
+        };
+        paginationElement.appendChild(pageButton);
+    }
+
+    // 다음 버튼
+    if (pagination.next) {
+        const nextButton = document.createElement("a");
+        nextButton.classList.add("btn-type", "size-s", "btn-next");
+        nextButton.textContent = "다음";
+        nextButton.href = `#`;
+        nextButton.onclick = (event) => {
+            event.preventDefault();
+            fetchPosts(pagination.page + 1);
+        };
+        paginationElement.appendChild(nextButton);
+    }
+}
+
+// 서버에서 게시글과 페이징 정보 불러오기
+function fetchPosts(page = 1, searchQuery = '', selectedFilter = '최신순') {
+    const url = `/community/community-post-list-check?page=${page}&query=${encodeURIComponent(searchQuery)}&filterType=${encodeURIComponent(selectedFilter)}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`서버 응답 오류: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched data:", data); // 디버깅을 위한 로그 추가
+            renderPosts(data);
+        })
+        .catch(error => {
+            console.error("Error fetching posts:", error);
+            alert("게시글을 불러오는 데 문제가 발생했습니다.");
         });
-    });
+}
