@@ -2,12 +2,9 @@ package com.app.positionback.controller.notice;
 
 import com.app.positionback.domain.corporation.CorporationVO;
 import com.app.positionback.domain.file.FileDTO;
-import com.app.positionback.domain.member.MemberVO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeListDTO;
 import com.app.positionback.service.corporation.CorporationService;
-import com.app.positionback.service.file.CorporationFileService;
-import com.app.positionback.service.member.MemberService;
 import com.app.positionback.service.notice.NoticeService;
 import com.app.positionback.utill.Pagination;
 import jakarta.servlet.http.HttpSession;
@@ -32,9 +29,10 @@ public class NoticeController {
 
 //    공고 작성 페이지 이동
     @GetMapping("corporation-login-main-write-posting")
-    public void goToWriteNotice(NoticeDTO noticeDTO) {
+    public void goToWriteNotice(NoticeDTO noticeDTO,Model model) {
         CorporationVO corporationVO = (CorporationVO) session.getAttribute("member");
         noticeDTO.setCorporationId(corporationVO.getId());
+        model.addAttribute("corporation", corporationVO);
     }
 
     @PostMapping("corporation-login-main-write-posting")
@@ -48,7 +46,8 @@ public class NoticeController {
     // 공고 목록 조회
     @GetMapping("corporation-login-main-posting-registration")
     public void getNoticePage(@RequestParam(required = false) Integer page,Pagination pagination, Model model) {
-        CorporationVO corporationVO = (CorporationVO) session.getAttribute("member");;
+        CorporationVO corporationVO = (CorporationVO) session.getAttribute("member");
+        FileDTO fileDTO = corporationService.getCorporationFileById(corporationVO.getId());
 
         // page가 null인 경우 기본값 설정
         if (page == null) {
@@ -69,13 +68,15 @@ public class NoticeController {
         model.addAttribute("closedCount", pagination.getClosedCount());
         model.addAttribute("categoryRankings", noticeListDTO.getCategoryRankings()); // 카테고리 순위 추가
         model.addAttribute("monthRankings", noticeListDTO.getMonthRankings()); // 월별 채용 순위 추가
+        model.addAttribute("file", fileDTO);
+        model.addAttribute("corporation", corporationVO);
     }
 
     // 공고 목록 조회 (비동기)
     @GetMapping("notices/list/{page}")
     @ResponseBody
     public NoticeListDTO getNoticeList(@PathVariable("page") Integer page, Pagination pagination) {
-        CorporationVO corporationVO = (CorporationVO) session.getAttribute("member");;
+        CorporationVO corporationVO = (CorporationVO) session.getAttribute("member");
 
         if(pagination.getOrder() == null){
             pagination.setOrder("recent");
@@ -88,6 +89,13 @@ public class NoticeController {
             page = 1; // 기본 페이지 번호
         }
         return noticeService.getNoticesByCorporationId(page,pagination,corporationVO.getId()); // corporationId에 맞게 조정
+    }
+    // 공고 전체 목록
+    @GetMapping("notices/all-list/{page}")
+    @ResponseBody
+    public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination) {
+
+        return noticeService.getAll(page,pagination); // corporationId에 맞게 조정
     }
 
     @GetMapping("notices/total")

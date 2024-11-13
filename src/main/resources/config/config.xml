@@ -14,6 +14,11 @@
 
         <typeAlias type="com.app.positionback.domain.inquiry.InquiryVO" alias="inquiryVO"/>
         <typeAlias type="com.app.positionback.domain.inquiry.InquiryDTO" alias="inquiryDTO"/>
+        <typeAlias type="com.app.positionback.domain.post.PostVO" alias="postVO"/>
+        <typeAlias type="com.app.positionback.domain.post.PostDTO" alias="postDTO"/>
+        <typeAlias type="com.app.positionback.domain.reply.ReplyVO" alias="replyVO"/>
+        <typeAlias type="com.app.positionback.domain.reply.ReplyDTO" alias="replyDTO"/>
+
 
     </typeAliases>
 </configuration>

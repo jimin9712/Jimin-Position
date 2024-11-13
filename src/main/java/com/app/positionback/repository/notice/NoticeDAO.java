@@ -1,7 +1,5 @@
 package com.app.positionback.repository.notice;
 
-import com.app.positionback.domain.file.FileDTO;
-import com.app.positionback.domain.file.NoticeFileDTO;
 import com.app.positionback.domain.notice.NoticeCategoryRankDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeMonthRankDTO;
@@ -69,6 +67,21 @@ public class NoticeDAO {
 
     public List<NoticeDTO> findRecentNotices(Long corporationId) {
         return noticeMapper.selectRecentNotices(corporationId);
+    }
+
+    // 공고 전체 목록(더보기)
+    public List<NoticeDTO> findAll(Pagination pagination) {
+        return noticeMapper.selectAll(pagination);
+    }
+
+    // 공고 전체 개수
+    public int getAllTotal() {
+        return noticeMapper.selectAllCount();
+    }
+
+    // 공고 인기순 4개
+    public List<NoticeDTO> findTop3(){
+        return noticeMapper.selectTop3();
     }
 
 }

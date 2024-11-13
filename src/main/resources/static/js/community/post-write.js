@@ -8,40 +8,6 @@ editor.addEventListener("input", () => {
     charCountDisplay.textContent = currentLength; // 글자 수 업데이트
 });
 
-// 카테고리 관련 변수
-const categoryButton = document.querySelector(".btn-category-select");
-const categoryList = document.querySelector(".list-qna-category");
-const categoryItems = document.querySelectorAll(".list-qna-category .category");
-
-// 카테고리 버튼 클릭 시 리스트 보이거나 숨기기
-categoryButton.addEventListener("click", () => {
-    if (categoryButton.classList.contains("expend")) {
-        categoryButton.classList.remove("expend"); // 리스트가 보이는 상태라면 숨김
-        categoryList.style.display = "none";
-    } else {
-        categoryButton.classList.add("expend"); // 리스트가 숨겨진 상태라면 펼침
-        categoryList.style.display = "block";
-    }
-});
-
-// 카테고리 항목 클릭 시 동작
-categoryItems.forEach((categoryItem) => {
-    categoryItem.addEventListener("click", () => {
-        const selectedCategory = categoryItem.getAttribute("data-name"); // 선택한 카테고리 이름 가져오기
-        if (selectedCategory) {
-            categoryButton.textContent = selectedCategory; // 선택한 카테고리 이름을 버튼에 반영
-            categoryButton.classList.remove("expend"); // 버튼에서 expend 클래스 제거
-            categoryList.style.display = "none"; // 카테고리 리스트를 숨김
-
-            // 모든 카테고리에서 'selected' 클래스 제거 후, 선택한 항목에만 추가
-            categoryItems.forEach((item) => {
-                item.classList.remove("selected");
-            });
-            categoryItem.classList.add("selected");
-        }
-    });
-});
-
 // 모달 관련 변수
 const submitButton = document.querySelector(".btn-qna-write"); // 게시글 등록 버튼
 const modal = document.getElementById("layer-qna-alert"); // 모달창
@@ -50,9 +16,13 @@ const confirmButton = document.querySelector(".btn-confirm"); // 확인 버튼
 const alertText = document.getElementById("alert-text"); // 모달 내용
 const titleInput = document.getElementById("qus-title"); // 제목 입력란
 const dimmed = document.getElementById("dimmed"); // dimmed 배경
+const postForm = document.getElementById("postForm"); // 폼
+const postContentField = document.getElementById("postContent"); // 숨겨진 textarea
 
 // 게시글 제출 버튼 클릭 시
-submitButton.addEventListener("click", () => {
+submitButton.addEventListener("click", (event) => {
+    event.preventDefault(); // 폼 제출 막기 (유효성 검사 후 진행)
+
     const title = titleInput.value.trim();
     const content = editor.textContent.trim(); // editor 대신 textContent 사용
 
@@ -70,7 +40,8 @@ submitButton.addEventListener("click", () => {
     }
     // 제목과 내용이 모두 있을 때
     else {
-        alert("게시글이 정상적으로 등록되었습니다.");
+        postContentField.value = content; // 숨겨진 textarea에 값 설정
+        postForm.submit(); // 유효성 검사를 통과한 경우 폼 제출
     }
 });
 

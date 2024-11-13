@@ -2369,77 +2369,77 @@ const categorys = {
         ],
     },
 };
-console.log(categorys);
-console.log(selectJobOneDepths);
-// text += Object.keys(categorys.categoryA);
-console.log(Object.keys(categorys));
-// Object.keys(categorys).forEach((key) => {
-let textA = ``;
-let textB = ``;
-// let textC = ``;/
-let i = 0;
-// let j = 0;
-Object.keys(categorys).forEach((categoryA) => {
-    i++;
-    // j++;
-    textA = `
-        <li class="item-job depth1-btn-wrapper" >
-            <button
-                type="button"
-                class="first-depth depth1-btn-16"
-            >
-                <span class="txt">${categoryA}</span>
-                <span class="count">(10,857)</span>
-            </button>
-        </li>`;
-    Object.keys(categorys[categoryA]).forEach((categoryB) => {
-        textB += `
-                    <dt>
-                        <button>
-                            <span class="depth2-${i}">${categoryB}</span>
-                        </button>
-                    </dt>
-                `;
-        categorys[categoryA][categoryB].forEach((categoryC) => {
-            textB += `
-                    <dd>
-                        <button class="depth3-${i}">${categoryC}</button>
-                    </dd>
-                `;
-        });
-    });
-    selectJobOneDepths.innerHTML += textA;
-    // viewports[2].innerHTML += textB;
-
-    // console.log(textA);
-});
+// console.log(categorys);
+// console.log(selectJobOneDepths);
+// // text += Object.keys(categorys.categoryA);
+// console.log(Object.keys(categorys));
+// // Object.keys(categorys).forEach((key) => {
+// let textA = ``;
+// let textB = ``;
+// // let textC = ``;/
+// let i = 0;
+// // let j = 0;
+// Object.keys(categorys).forEach((categoryA) => {
+//     i++;
+//     // j++;
+//     textA = `
+//         <li class="item-job depth1-btn-wrapper" >
+//             <button
+//                 type="button"
+//                 class="first-depth depth1-btn-16"
+//             >
+//                 <span class="txt">${categoryA}</span>
+//                 <span class="count">(10,857)</span>
+//             </button>
+//         </li>`;
+//     Object.keys(categorys[categoryA]).forEach((categoryB) => {
+//         textB += `
+//                     <dt>
+//                         <button>
+//                             <span class="depth2-${i}">${categoryB}</span>
+//                         </button>
+//                     </dt>
+//                 `;
+//         categorys[categoryA][categoryB].forEach((categoryC) => {
+//             textB += `
+//                     <dd>
+//                         <button class="depth3-${i}">${categoryC}</button>
+//                     </dd>
+//                 `;
+//         });
+//     });
+//     selectJobOneDepths.innerHTML += textA;
+//     // viewports[2].innerHTML += textB;
+//
+//     // console.log(textA);
+// });
 
 // });
-const selectJobLists = document.querySelectorAll(
-    ".item-job.depth1-btn-wrapper"
-);
-console.log(selectJobLists);
-console.log(selectJobOneDepths.children);
-
-const DeepDepthElements = [...selectJobOneDepths.children];
-
-DeepDepthElements.forEach((DeepDepthElement) => {
-    console.log(DeepDepthElement.children);
-    DeepDepthElement.children.addEventListener("click", (e) => {
-        console.log(e.target);
-        viewports[2].children.forEach((child) => {
-            child.style.display = "none";
-        });
-        const blockChildren = viewports[2].children.filter(
-            (child) =>
-                child.classList.contains(`depth2-${i}`) ||
-                child.classList.contains(`depth3-${i}`)
-        );
-        blockChildren.forEach((blockChild) => {
-            blockChild.style.display = "block";
-        });
-    });
-});
+// const selectJobLists = document.querySelectorAll(
+//     ".item-job.depth1-btn-wrapper"
+// );
+// console.log(selectJobLists);
+// console.log(selectJobOneDepths.children);
+//
+// const DeepDepthElements = [...selectJobOneDepths.children];
+//
+// DeepDepthElements.forEach((DeepDepthElement) => {
+//     console.log(DeepDepthElement.children);
+//     DeepDepthElement.children.addEventListener("click", (e) => {
+//         console.log(e.target);
+//         viewports[2].children.forEach((child) => {
+//             child.style.display = "none";
+//         });
+//         const blockChildren = viewports[2].children.filter(
+//             (child) =>
+//                 child.classList.contains(`depth2-${i}`) ||
+//                 child.classList.contains(`depth3-${i}`)
+//         );
+//         blockChildren.forEach((blockChild) => {
+//             blockChild.style.display = "block";
+//         });
+//     });
+// });
 
 // selectJobOneDepths.innerHTML
 // text= `
