@@ -1,7 +1,5 @@
 package com.app.positionback.repository.notice;
 
-import com.app.positionback.domain.file.FileDTO;
-import com.app.positionback.domain.file.NoticeFileDTO;
 import com.app.positionback.domain.notice.NoticeCategoryRankDTO;
 import com.app.positionback.domain.notice.NoticeDTO;
 import com.app.positionback.domain.notice.NoticeMonthRankDTO;
@@ -82,8 +80,8 @@ public class NoticeDAO {
     }
 
     // 공고 인기순 4개
-    public List<NoticeDTO> findTop4(){
-        return noticeMapper.selectTop4();
+    public List<NoticeDTO> findTop3(){
+        return noticeMapper.selectTop3();
     }
 
 }
