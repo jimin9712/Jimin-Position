@@ -42,5 +42,8 @@ public interface NoticeService {
     // 공고 인기순 4개
     public NoticeListDTO getTop3();
 
+    // 공고 전체 개수
+    public int getAllTotal();
+
     public int getSearchAllTotal(Search search);
 }

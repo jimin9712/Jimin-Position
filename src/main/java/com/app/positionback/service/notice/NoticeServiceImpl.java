@@ -168,11 +168,7 @@ public class NoticeServiceImpl implements NoticeService {
     public NoticeListDTO getAll(int page, Pagination pagination,Search search) {
         NoticeListDTO noticeListDTO = new NoticeListDTO();
         pagination.setPage(page);
-        if(search.getKeyword() != null || search.getTypes() != null) {
-            pagination.setTotal(noticeDAO.getSearchAllTotal(search));
-        }else{
-            pagination.setTotal(noticeDAO.getAllTotal());
-        }
+
 //        pagination.setTotal(noticeDAO.getAllTotal());
         pagination.progress(12);
         noticeListDTO.setPagination(pagination);
@@ -205,6 +201,11 @@ public class NoticeServiceImpl implements NoticeService {
 
         noticeListDTO.setNotices(notices); // 공고 목록을 NoticeListDTO에 설정
         return noticeListDTO;
+    }
+
+    @Override
+    public int getAllTotal() {
+        return noticeDAO.getAllTotal();
     }
 
     @Override

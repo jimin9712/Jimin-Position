@@ -95,6 +95,11 @@ public class NoticeController {
     @GetMapping("notices/all-list/{page}")
     @ResponseBody
     public NoticeListDTO getNoticeAllList(@PathVariable("page") Integer page, Pagination pagination, Search search) {
+        if(search.getKeyword() != null || search.getTypes() != null) {
+            pagination.setTotal(noticeService.getSearchAllTotal(search));
+        }else{
+            pagination.setTotal(noticeService.getAllTotal());
+        }
 
         return noticeService.getAll(page,pagination, search); // corporationId에 맞게 조정
     }
