@@ -6,8 +6,8 @@ create table tbl_member(
     member_name varchar(255) not null,
     member_email varchar(255) not null,
     member_password varchar(255) not null,
-    member_address varchar(255) not null,
-    member_address_detail varchar(255) not null,
+    member_address varchar(255),
+    member_address_detail varchar(255),
     member_nickname varchar(255) ,
     member_status varchar(255) default '활동중',
     member_complain_count int default 0, # 신고 누적 횟수
@@ -32,7 +32,15 @@ alter table tbl_member modify column member_address_detail varchar(255);
 alter table tbl_member modify column member_password varchar(255);
 alter table tbl_member drop column member_type;
 
-
+insert into tbl_member (member_name,
+                        member_password,
+                        member_phone,
+                        member_email,
+                        member_kakao_email,
+                        member_address,
+                        member_status,
+                        member_address_detail)
+values ('양승민', '1234567','010-1234-5678', '746aa1357@gmail.com', NULL, '성남시 수정구', '활동중', '태평역 3번출구');
 
 INSERT INTO tbl_member (
     member_name,

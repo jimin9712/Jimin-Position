@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,7 +101,8 @@ public class MemberController {
                 throw new LoginFailException();
             });
             session.setAttribute("member", memberVO);
-            return new RedirectView("/");
+            log.info("멤버 들어옴 : {} ", session.getAttribute("member"));
+            return new RedirectView("/main");
         }
         Optional<CorporationVO> foundCorporation = corporationService.login(memberDTO);
         CorporationVO corporationVO = foundCorporation.orElseThrow(() -> {
@@ -116,9 +119,39 @@ public class MemberController {
         return new RedirectView("/login");
     }
 
-    @GetMapping("/")
-    public String goToMain(MemberDTO memberDTO, HttpSession session){
-        session.invalidate();
+    @GetMapping("/main")
+    public String goToMain(){
         return "main/body";
     }
+
+    @GetMapping("/mypage")
+    public String goToMypage(HttpSession session){
+        MemberVO member = (MemberVO) session.getAttribute("member");
+        if(member != null){
+            if(member.getMemberEmail() != null) {
+                return "my-page/my-info-general";
+            } else {
+                return "my-page/my-info-kakao";
+            }
+        } else {
+            return "login/login-combine";
+        }
+    }
+
+    @GetMapping("/my-page/my-info-kakao-detail")
+    public void goToMypageDetail(){
+        log.info("이동 레츠고");
+    }
+
+//    @GetMapping("/find-password/{memberId}")
+//    public MemberVO findPassword(@PathVariable Long memberId){
+//        Optional<MemberVO> foundMember = memberService.getMember(memberId);
+//        MemberVO member = new MemberVO();
+//        if(foundMember.isPresent()) {
+//            member = foundMember.get();
+//            return member;
+//        }
+//        return member;
+//    }
 }
+
