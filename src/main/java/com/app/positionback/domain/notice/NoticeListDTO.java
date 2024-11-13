@@ -16,4 +16,5 @@ public class NoticeListDTO {
     private Pagination pagination;
     private List<NoticeCategoryRankDTO> categoryRankings;
     private List<NoticeMonthRankDTO> monthRankings;
+    private Search search;
 }
