@@ -28,10 +28,15 @@ keywordInput.addEventListener("focus", () => {
 
 // 입력 필드에 blur 이벤트 리스너 추가
 keywordInput.addEventListener("blur", () => {
+    const keyword = document.getElementById("total-ipt-keyword").value;
+
     // blur될 때 스타일을 원래대로 복구합니다.
     keywordSection.classList.remove("on");
-    optionContentKeywordSection.classList.remove("on");
+    // optionContentKeywordSection.classList.remove("on");
     layerSearchKeyword.classList.add("no-suggest");
+    formData = new FormData();
+    formData.append("keyword", keyword); // 검색 정보 추가
+    matchingService.getList(1, formData, showListScroll);
 });
 
 btnReset.addEventListener("click", () => {
@@ -40,4 +45,6 @@ btnReset.addEventListener("click", () => {
     optionContents.forEach(optionContent => {
         optionContent.classList.remove("on");
     });
+    const formData=null;
+    matchingService.getList(1, formData, showListScroll);
 })
