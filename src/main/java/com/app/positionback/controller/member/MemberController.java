@@ -120,7 +120,7 @@ public class MemberController {
         session.invalidate();
         return new RedirectView("/login");
     }
-    
+
     @GetMapping("/main")
     public String goToMain(){
         return "main/body";
