@@ -51,3 +51,24 @@
 <h2>4. ERD</h2>
 
 <img src="./position/erd.png">
+<h2>5. 담당업무</h2>
+5-1 프론트엔드
+<img src="./position/front.png">
+▶커뮤니티
+<ul>
+ <li>현직자 인터뷰 - 목록</li></li>
+ <li>현직자 인터뷰 - 상세보기</li>
+ <li>나의 지원내역</li>
+ <li>나의 게시글 목록</li>
+</ul>
+
+5-2 백엔드
+<img src="./position/back.png">
+▶커뮤니티
+<ul>
+ <li>사용자가 커뮤니티를 작성할 수 있음</li>
+ <li>로그인 세션이 담겨야만 작성 가능 없을 시, 로그인 페이지로 리다이렉트</li>
+ <li>커뮤니티 조회</li>
+ <li>커뮤니티 목록</li>
+ <li>커뮤니티 댓글</li>
+</ul>
