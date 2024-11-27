@@ -30,18 +30,14 @@
 <ul>
     <li>Java</li>
     <li>Java Spring Data</li>
-    <li>QueryDSL</li>
     <li>Java Script</li>
     <li>Tomcat</li>
-    <li>jQuery</li>
     <li>MySQL</li>
     <li>Spring Boot</li>
     <li>Visual Studio Code</li>
-    <li>DBeaver</li>
     <li>Sourcetree</li>
     <li>Git, GitHub</li>
     <li>JSON</li>
-    <li>Ajax</li>
     <li>JDK 17.0.10</li>
     <li>Kakao DEVELOPER API</li>
     <li>Kakao Map API</li>
